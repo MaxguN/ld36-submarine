@@ -1,14 +1,12 @@
-function Dialog(level, dialog) {
+function Dialog(level, file, dialog) {
 	var self = this;
-	// multiple choices
-	// interrupt points for choices
-	// different outcomes according to answer
 	this.fontSize = 18;
 	this.choicePadding = 3;
 	this.choiceHeight = 26;
 	this.choiceSpace = 5;
 
 	this.level = level;
+	this.file = file;
 
 	this.textbox;
 	this.choices = new PIXI.Container();
@@ -18,11 +16,14 @@ function Dialog(level, dialog) {
 		end : []
 	}
 
-	load.json('dialogs/test.json', function (data) {self.Init(data, dialog);});
+	load.json('dialogs/' + file + '.json', function (data) {self.Init(data, dialog);});
 }
 
 Dialog.prototype.Init = function (data, dialog) {
 	var self = this;
+	if (!dialog) {
+		dialog = data.entrypoint;
+	}
 	this.textbox = new TextBox(this.level, data[dialog].text);
 
 	if (data[dialog].choices) {
@@ -52,11 +53,12 @@ Dialog.prototype.Init = function (data, dialog) {
 			if (event.button === 0) {
 				rectangles.some(function (rectangle, index) {
 					if (rectangle.contains(event.layerX, event.layerY)) {
-						var followup = new Dialog(self.level, data[dialog].followup[index].dialog);
+						var followup = new Dialog(self.level, self.file, data[dialog].followup[index].dialog);
 						followup.on('end', function () {
 							self.end(data[dialog].followup[index].result);
 						})
 						self.Hide();
+						followup.Display();
 
 						return true;
 					}
@@ -74,8 +76,6 @@ Dialog.prototype.Init = function (data, dialog) {
 			self.textbox.Hide();
 		});
 	}
-
-	this.textbox.Display();
 }
 
 Dialog.prototype.on = function (event, callback) {
@@ -98,6 +98,9 @@ Dialog.prototype.Hide = function () {
 	this.Lock();
 	this.level.gui.removeChild(this.choices);
 	this.textbox.Hide();
+}
+Dialog.prototype.Display = function () {
+	this.textbox.Display();
 }
 
 Dialog.prototype.Unlock = function () {

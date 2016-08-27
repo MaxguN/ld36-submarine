@@ -5,16 +5,16 @@ X - level map
 X - loading level
 X - submarine object
 X - submarine movements
-	- collision system
-	- objective interaction
+X - collision system
+X - objective interaction
 X - text display
-	- dialog system
+X - dialog system
+	- underwater system
 	- inventory
+X - island tileset
 	- ennemy sprite (ship)
 	- combat system
-	- underwater system
 	- fog of war
 	- sonar system
 	- sfx
 	- music
-	- island tileset

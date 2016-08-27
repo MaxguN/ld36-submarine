@@ -11,6 +11,7 @@ var keys = {
 }
 
 var keydown = {};
+var diagValue = Math.sqrt(2) / 2;
 
 function onkeydown(event) {
 	if (keydown[event.keyCode] === undefined) {
@@ -46,8 +47,8 @@ function GetDirection() {
 	}
 
 	if (direction.x && direction.y) {
-		direction.x *= 0.7071067811865476;
-		direction.y *= 0.7071067811865476;
+		direction.x *= diagValue;
+		direction.y *= diagValue;
 	}
 
 	return direction;

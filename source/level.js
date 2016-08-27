@@ -28,6 +28,7 @@ function Level(name, renderer) {
 
 	this.origin = {x:0,y:0};
 	this.submarine = {};
+	this.interactable = null;
 	this.end = -1;
 
 	this.objects = {};
@@ -124,16 +125,18 @@ Level.prototype.Init = function(level) {
 				layer.data.forEach(function (tileid, index) {
 					var x = index % layer.width;
 					var y = Math.floor(index / layer.width);
+					var count = 0;
 
 					switch (tileid) {
 						case submarineid :
 							this.origin.x = x * level.tilewidth;
 							this.origin.y = y * level.tileheight;
-							this.character = new Submarine(this.origin.x, this.origin.y, this);
-							this.AddObject(this.character);
+							this.submarine = new Submarine(this.origin.x, this.origin.y, this);
+							this.AddObject(this.submarine);
 							break;
 						case seamarkid :
-							this.AddObject(new SeaMark(x * level.tilewidth, y * level.tileheight, this));
+							this.AddObject(new SeaMark(x * level.tilewidth, y * level.tileheight, this, count));
+							count += 1;
 							break;
 					}
 				}, this);
@@ -149,10 +152,10 @@ Level.prototype.Init = function(level) {
 		(this.next.ready.shift())();
 	}
 
-	var dialog = new Dialog(this, "dialog1");
-	dialog.on('end', function (success) {
-		console.log(success);
-	})
+	// var dialog = new Dialog(this, "puzzle1");
+	// dialog.on('end', function (success) {
+	// 	console.log(success);
+	// })
 };
 
 Level.prototype.on = function(event, callback) {
@@ -197,6 +200,30 @@ Level.prototype.UpdateCamera = function(point) {
  	
 	this.map.y = Math.round(-Math.min(Math.max(0, point.y - this.renderer.height / 2), this.map.height - this.renderer.height));
 };
+
+Level.prototype.SetInteractable = function (object) {
+	this.interactable = object;
+}
+
+Level.prototype.Interact = function () {
+	var self = this;
+
+	if (this.interactable) {
+		this.interactable.LaunchDialog(function (success) {
+			if (success) {
+				self.submarine.Success(self.interactable);
+			} else {
+				self.submarine.Failure(self.interactable);
+			}
+
+			self.submarine.Unlock();
+		});
+
+		return true;
+	} else {
+		return false;
+	}
+}
 
 Level.prototype.Collides = function(rectangle) {
 	function intersectRectangles(rectangle1, rectangle2) {
@@ -253,6 +280,16 @@ Level.prototype.RemoveObject = function (object) {
 			break;
 		}
 	}
+}
+
+Level.prototype.GetColliders = function (whitelist) {
+	var colliders = [];
+
+	whitelist.forEach(function (tag) {
+		colliders = colliders.concat(this.objects[tag]);
+	}, this);
+
+	return colliders;
 }
 
 Level.prototype.Tick = function(length) {

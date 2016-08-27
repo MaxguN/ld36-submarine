@@ -81,8 +81,6 @@ Animator.prototype.Init = function (data) {
 		}
 	}
 
-	console.log(data.default);
-
 	this.currentAnimation = this.animations[this.currentState][data.default];
 	this.currentAnimationName = data.default;
 	this.currentAnimation.position = new PIXI.Point(this.x, this.y);

@@ -1,10 +1,10 @@
 function Submarine(x, y, level) {
 	Animator.call(this, x, y, level.map);
-	Collider.call(this, Tags.Player, [
-		Tags.Seamark
-	]);
+	Collider.call(this, Tags.Player, [Tags.Seamark], new PIXI.Circle(x + level.tile.width / 2, y + level.tile.height / 2, 16));
 
 	var self = this;
+
+	this.locked = false;
 
 	this.rotation = 0;
 	this.speed = 256; // pixels/second
@@ -85,16 +85,35 @@ Submarine.prototype.Collides = function (delta, length) {
 				}
 			}, this);
 		}
-	} else if (this.vy === 0) {
-		this.vy = -(this.gravity * length);
-		this.SwitchToAnim('falling', this.mirrored);
 	}
 
 	return delta;
 }
 
+Submarine.prototype.Lock = function () {
+	this.locked = true;
+}
+
+Submarine.prototype.Unlock = function () {
+	this.locked = false;
+}
+
+Submarine.prototype.Interact = function () {
+	if (this.level.Interact()) {
+		this.Lock();
+	}
+}
+
+Submarine.prototype.Success = function (seamark) {
+	console.log('success');
+}
+
+Submarine.prototype.Failure = function (seamark) {
+	console.log('failure');
+}
+
 Submarine.prototype.Tick = function (length) {
-	if (this.isLoaded) {
+	if (this.isLoaded && !this.locked) {
 		var delta = GetDirection();
 		
 		if (IsMoving()) {
@@ -119,7 +138,13 @@ Submarine.prototype.Tick = function (length) {
 
 		this.currentAnimation.position.x = this.x;
 		this.currentAnimation.position.y = this.y;
+		this.colliderShape.x = this.GetCenter().x;
+		this.colliderShape.y = this.GetCenter().y;
 
 		this.level.UpdateCamera(this.GetCenter());
+
+		if (keydown[keys.space]) {
+			this.Interact();
+		}
 	}
 }

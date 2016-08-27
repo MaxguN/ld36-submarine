@@ -1,6 +1,7 @@
-function Collider(tag, whitelist) {
+function Collider(tag, whitelist, shape) {
 	this.colliderTag = tag;
 	this.colliderWhitelist = whitelist;
+	this.colliderShape = shape;
 }
 
 var Tags = {
