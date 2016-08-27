@@ -1,0 +1,23 @@
+Top down exploration game
+
+Theme : Ancient Technology ?
+
+
+One big map (mostly water)
+--> submarine (surface/underwater modes)
+--> objectives / ''puzzles'' / quests to retreive parts / story
+	==> build something (vehicle, building, technology)
+--> (opt) combat system
+--> (opt) islands for on foot exploration
+
+--> (opt) mobile version
+
+
+
+Tools :
+	- Pixi.js
+	- Sublime Text
+	- Tiled
+	- Audacity - Mouthsounds ? Midi keyboard
+	- Pickle / Pyxel Edit
+	- Gimp

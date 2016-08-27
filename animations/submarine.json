@@ -1,0 +1,34 @@
+{
+	"default" : "idle",
+	"animations" : {
+		"idle" : {
+			"frames" : [
+				{"tile" : 0}
+			],
+			"speed" : 20,
+			"loop" : true,
+			"loopto" : 0
+		},
+		"move" : {
+			"frames" : [
+				{"tile" : 0},
+				{"tile" : 1}
+			],
+			"speed" : 20,
+			"loop" : true,
+			"loopto" : 0
+		}
+	},
+	"tilesets" : [
+		{
+			"file" : "submarine.png",
+			"tilewidth" : 32,
+			"tileheight" : 32,
+			"imagewidth" : 64,
+			"imageheight" : 32,
+			"firstgid" : 0
+		}
+	],
+	"stateful" : false,
+	"states" : 0
+}

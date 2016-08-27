@@ -1,0 +1,32 @@
+{
+	"default" : "idle",
+	"animations" : {
+		"idle" : {
+			"frames" : [
+				{"tile" : 0},
+				{"tile" : 1},
+				{"tile" : 2},
+				{"tile" : 3},
+				{"tile" : 4},
+				{"tile" : 3},
+				{"tile" : 2},
+				{"tile" : 1}
+			],
+			"speed" : 20,
+			"loop" : true,
+			"loopto" : 0
+		}
+	},
+	"tilesets" : [
+		{
+			"file" : "seamark.png",
+			"tilewidth" : 32,
+			"tileheight" : 32,
+			"imagewidth" : 160,
+			"imageheight" : 32,
+			"firstgid" : 0
+		}
+	],
+	"stateful" : false,
+	"states" : 0
+}
