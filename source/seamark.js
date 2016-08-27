@@ -1,5 +1,5 @@
 function SeaMark(x, y, level) {
-	Animator.call(this, x, y, level.container);
+	Animator.call(this, x, y, level.map);
 	Collider.call(this, Tags.Seamark, []);
 
 	var self = this;

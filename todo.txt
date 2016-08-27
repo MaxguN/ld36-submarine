@@ -7,7 +7,7 @@ X - submarine object
 X - submarine movements
 	- collision system
 	- objective interaction
-	- text display
+X - text display
 	- dialog system
 	- inventory
 	- ennemy sprite (ship)

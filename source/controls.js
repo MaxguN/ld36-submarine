@@ -61,16 +61,38 @@ var mouse = (function () {
 		mouseup : []
 	}
 
+	var data = {
+		x : 0,
+		y : 0,
+		left : false,
+		middle : false,
+		right : false,
+		on : on,
+		off : off,
+		down : onmousedown,
+		move : onmousemove,
+		up  : onmouseup
+	};
+
 	function on(event, callback) {
 		if (listeners[event]) {
 			listeners[event].push(callback);
 		}
 	}
 
+	function off(event, callback) {
+		for (var i = 0; i < listeners[event].length; i += 1) {
+			if (listeners[event][i] === callback) {
+				listeners[event].splice(i, 1);
+				break;
+			}
+		}
+	}
+
 	function onmousedown(event) {
-		mouse.left = (event.button === 0);
-		mouse.middle = (event.button === 1);
-		mouse.right = (event.button === 2);
+		data.left = (event.button === 0);
+		data.middle = (event.button === 1);
+		data.right = (event.button === 2);
 
 		listeners.mousedown.forEach(function (listener) {
 			listener(event);
@@ -78,8 +100,8 @@ var mouse = (function () {
 	}
 
 	function onmousemove(event) {
-		mouse.x = event.layerX;
-		mouse.y = event.layerY;
+		data.x = event.layerX;
+		data.y = event.layerY;
 
 		listeners.mousemove.forEach(function (listener) {
 			listener(event);
@@ -87,9 +109,9 @@ var mouse = (function () {
 	}
 
 	function onmouseup(event) {
-		mouse.left = !(event.button === 0);
-		mouse.middle = !(event.button === 1);
-		mouse.right = !(event.button === 2);
+		data.left = !(event.button === 0);
+		data.middle = !(event.button === 1);
+		data.right = !(event.button === 2);
 
 		listeners.mouseup.forEach(function (listener) {
 			listener(event);
@@ -99,21 +121,12 @@ var mouse = (function () {
 		});
 	}
 
-	return {
-		x : 0,
-		y : 0,
-		left : false,
-		middle : false,
-		right : false,
-		on : on,
-		down : onmousedown,
-		move : onmousemove,
-		up  :onmouseup
-	};
+	return data;
 })();
 
 document.addEventListener('keydown', onkeydown);
 document.addEventListener('keyup', onkeyup);
-document.addEventListener('mousedown', mouse.down);
-document.addEventListener('mousemove', mouse.move);
-document.addEventListener('mouseup', mouse.up);
+renderer.view.addEventListener('mousedown', mouse.down);
+renderer.view.addEventListener('mousemove', mouse.move);
+renderer.view.addEventListener('mouseup', mouse.up);
+renderer.view.oncontextmenu = function () { return false; }

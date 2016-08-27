@@ -52,8 +52,15 @@ function Level(name, renderer) {
 
 	this.renderer = renderer;
 	this.container = new PIXI.Container();
+	this.map = new PIXI.Container();
+	this.gui = new PIXI.Container();
 
-	this.container.scale = new PIXI.Point(1,1);
+	this.gui.position = new PIXI.Point(0,0);
+	this.gui.width = this.renderer.width;
+	this.gui.height = this.renderer.height;
+
+	this.container.addChild(this.map);
+	this.container.addChild(this.gui);
 
 	load.json('levels/' + name + '.json', function (data) {self.Init(data);});
 }
@@ -109,7 +116,7 @@ Level.prototype.Init = function(level) {
 					var y = Math.floor(index / this.width) * this.tile.height;
 
 					tile.position = new PIXI.Point(x, y);
-					this.container.addChild(tile);
+					this.map.addChild(tile);
 				}
 			}, this);
 		} else {
@@ -170,20 +177,20 @@ Level.prototype.win = function() {
 };
 
 Level.prototype.CenterCamera = function (point) {
-	this.container.x = -Math.min(Math.max(0, point.x - this.renderer.width / 2), this.container.width - this.renderer.width);
-	this.container.y = -Math.min(Math.max(0, point.y - this.renderer.height / 2), this.container.height - this.renderer.height);
+	this.map.x = -Math.min(Math.max(0, point.x - this.renderer.width / 2), this.map.width - this.renderer.width);
+	this.map.y = -Math.min(Math.max(0, point.y - this.renderer.height / 2), this.map.height - this.renderer.height);
 }
 
 Level.prototype.UpdateCamera = function(point) {
 	var space = 32;
 
-	if (-this.container.x > point.x + space - this.renderer.width / 2) { // left border
-		this.container.x = Math.round(-Math.min(Math.max(0, point.x + space - this.renderer.width / 2), this.container.width - this.renderer.width));
-	} else if (-this.container.x < point.x - space - this.renderer.width / 2) { // right border
-		this.container.x = Math.round(-Math.min(Math.max(0, point.x - space - this.renderer.width / 2), this.container.width - this.renderer.width));
+	if (-this.map.x > point.x + space - this.renderer.width / 2) { // left border
+		this.map.x = Math.round(-Math.min(Math.max(0, point.x + space - this.renderer.width / 2), this.map.width - this.renderer.width));
+	} else if (-this.map.x < point.x - space - this.renderer.width / 2) { // right border
+		this.map.x = Math.round(-Math.min(Math.max(0, point.x - space - this.renderer.width / 2), this.map.width - this.renderer.width));
 	}
  	
-	this.container.y = Math.round(-Math.min(Math.max(0, point.y - this.renderer.height / 2), this.container.height - this.renderer.height));
+	this.map.y = Math.round(-Math.min(Math.max(0, point.y - this.renderer.height / 2), this.map.height - this.renderer.height));
 };
 
 Level.prototype.Collides = function(rectangle) {
