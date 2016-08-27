@@ -6,6 +6,7 @@ function Submarine(x, y, level) {
 
 	var self = this;
 
+	this.rotation = 0;
 	this.speed = 256; // pixels/second
 	// this.rateOfFire = 5; // shoots / second
 
@@ -94,26 +95,16 @@ Submarine.prototype.Collides = function (delta, length) {
 
 Submarine.prototype.Tick = function (length) {
 	if (this.isLoaded) {
-		var delta = {
-			x : 0,
-			y : 0
+		var delta = GetDirection();
+		
+		if (IsMoving()) {
+			this.rotation = Math.PI / 2 - Math.acos(delta.x) * (delta.y ? -Math.sign(delta.y) : 1);
 		}
 
-		if (keydown[keys.left]) {
-			delta.x -= this.speed * length;
-		}
+		this.currentAnimation.rotation = this.rotation;
 
-		if (keydown[keys.right]) {
-			delta.x += this.speed * length;
-		}
-
-		if (keydown[keys.up]) {
-			delta.y -= this.speed * length;
-		}
-
-		if (keydown[keys.down]) {
-			delta.y += this.speed * length;
-		}
+		delta.x *= this.speed * length;
+		delta.y *= this.speed * length;
 
 		// delta = this.Collides(delta, length);
 

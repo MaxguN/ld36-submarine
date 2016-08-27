@@ -77,6 +77,7 @@ Animator.prototype.Init = function (data) {
 
 			this.animations[state][animation] = new PIXI.extras.MovieClip(textureSet);
 			this.animations[state][animation].animationSpeed = 0.15;
+			this.animations[state][animation].pivot = new PIXI.Point(this.animations[state][animation].width / 2, this.animations[state][animation].height / 2);
 		}
 	}
 

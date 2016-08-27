@@ -22,6 +22,37 @@ function onkeyup (event) {
 	delete keydown[event.keyCode];
 }
 
+function IsMoving() {
+	return (keydown[keys.left] || keydown[keys.right] || keydown[keys.up] || keydown[keys.down])
+}
+
+function GetDirection() {
+	var direction = new PIXI.Point(0, 0);
+
+	if (keydown[keys.left]) {
+		direction.x -= 1;
+	}
+
+	if (keydown[keys.right]) {
+		direction.x += 1;
+	}
+
+	if (keydown[keys.up]) {
+		direction.y -= 1;
+	}
+
+	if (keydown[keys.down]) {
+		direction.y += 1;
+	}
+
+	if (direction.x && direction.y) {
+		direction.x *= 0.7071067811865476;
+		direction.y *= 0.7071067811865476;
+	}
+
+	return direction;
+}
+
 var mouse = (function () {
 	var listeners = {
 		click : [],
