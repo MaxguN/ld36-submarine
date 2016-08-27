@@ -1,0 +1,109 @@
+function Dialog(level, dialog) {
+	var self = this;
+	// multiple choices
+	// interrupt points for choices
+	// different outcomes according to answer
+	this.fontSize = 18;
+	this.choicePadding = 3;
+	this.choiceHeight = 26;
+	this.choiceSpace = 5;
+
+	this.level = level;
+
+	this.textbox;
+	this.choices = new PIXI.Container();
+	this.listener = function () {};
+
+	this.listeners = {
+		end : []
+	}
+
+	load.json('dialogs/test.json', function (data) {self.Init(data, dialog);});
+}
+
+Dialog.prototype.Init = function (data, dialog) {
+	var self = this;
+	this.textbox = new TextBox(this.level, data[dialog].text);
+
+	if (data[dialog].choices) {
+		var height = data[dialog].choices.length * this.choiceHeight + (data[dialog].choices.length - 1) * this.choiceSpace;
+		var width = 400;
+		var top = (350 - height) / 2;
+		var left = (800 - width) / 2;
+		var rectangles = [];
+
+		var graph = new PIXI.Graphics();
+		this.choices.addChild(graph);
+
+		graph.beginFill(0x000000, 1);
+
+		data[dialog].choices.forEach(function (choice, index) {
+			var choiceTop = top + index * (this.choiceHeight + this.choiceSpace);
+			var text = new PIXI.Text(choice, {fontFamily : 'Arial', fontSize: 18, align : 'center', fill : 0xDDDDDD});
+			
+			text.position = new PIXI.Point((800 - text.width) / 2, choiceTop + this.choicePadding);
+			graph.drawRect(left, choiceTop, width, this.choiceHeight);
+			rectangles.push(new PIXI.Rectangle(left, choiceTop, width, this.choiceHeight));
+
+			this.choices.addChild(text);
+		}, this);
+
+		this.listener = function (event) {
+			if (event.button === 0) {
+				rectangles.some(function (rectangle, index) {
+					if (rectangle.contains(event.layerX, event.layerY)) {
+						var followup = new Dialog(self.level, data[dialog].followup[index].dialog);
+						followup.on('end', function () {
+							self.end(data[dialog].followup[index].result);
+						})
+						self.Hide();
+
+						return true;
+					}
+				});
+			}
+		}
+
+		this.textbox.on('end', function () {
+			self.level.gui.addChild(self.choices);
+			self.Unlock();
+		});
+	} else {
+		this.textbox.on('end', function () {
+			self.end();
+			self.textbox.Hide();
+		});
+	}
+
+	this.textbox.Display();
+}
+
+Dialog.prototype.on = function (event, callback) {
+	if (this.listeners[event]) {
+		this.listeners[event].push(callback);
+	}
+}
+
+Dialog.prototype.end = function (success) {
+	if (this.listeners.end.length) {
+		this.listeners.end.forEach(function (callback) {
+			callback(success);
+		});
+	} else {
+		this.Hide();
+	}
+}
+
+Dialog.prototype.Hide = function () {
+	this.Lock();
+	this.level.gui.removeChild(this.choices);
+	this.textbox.Hide();
+}
+
+Dialog.prototype.Unlock = function () {
+	mouse.on('click', this.listener);
+}
+
+Dialog.prototype.Lock = function () {
+	mouse.off('click', this.listener);
+}

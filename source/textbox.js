@@ -9,6 +9,10 @@ function TextBox(level, pages) {
 
 	this.listener = function () {};
 
+	this.listeners = {
+		end : []
+	}
+
 	this.Init(pages);
 }
 
@@ -28,12 +32,11 @@ TextBox.prototype.Init = function (pages) {
 	}, this);
 
 	this.listener = function (event) {
-		console.log('listener used')
 		if (event.button === 0) {
 			if (self.index < self.pages.length - 1) {
 				self.NextPage();
 			} else if (self.index < self.pages.length) {
-				self.Hide();
+				self.end();
 			}
 		} else if (event.button === 2) {
 			if (self.index > 0) {
@@ -41,6 +44,22 @@ TextBox.prototype.Init = function (pages) {
 			}
 		}
 	};
+}
+
+TextBox.prototype.on = function (event, callback) {
+	if (this.listeners[event]) {
+		this.listeners[event].push(callback);
+	}
+}
+
+TextBox.prototype.end = function () {
+	if (this.listeners.end.length) {
+		this.listeners.end.forEach(function (callback) {
+			callback();
+		});
+	} else {
+		this.Hide();
+	}
 }
 
 TextBox.prototype.Reset = function () {

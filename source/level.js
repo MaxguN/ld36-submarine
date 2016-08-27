@@ -148,6 +148,11 @@ Level.prototype.Init = function(level) {
 	while (this.next.ready.length > 0) {
 		(this.next.ready.shift())();
 	}
+
+	var dialog = new Dialog(this, "dialog1");
+	dialog.on('end', function (success) {
+		console.log(success);
+	})
 };
 
 Level.prototype.on = function(event, callback) {
