@@ -121,12 +121,15 @@ Submarine.prototype.Inventory = function () {
 }
 
 Submarine.prototype.Success = function (seamark) {
-	this.inventory.ItemUnlock(seamark.number);
-	seamark.Lock();
+	if (seamark) {
+		// console.log('unlocked item ' + seamark.number)
+		this.inventory.ItemUnlock(seamark.number);
+		seamark.Lock();
+	}
 }
 
 Submarine.prototype.Failure = function (seamark) {
-	console.log('failure');
+	// console.log('failure');
 }
 
 Submarine.prototype.Tick = function (length) {
@@ -171,6 +174,7 @@ Submarine.prototype.Tick = function (length) {
 
 			if (keydown[keys.space]) {
 				this.Interact();
+				keydown[keys.space] = false;
 			}
 
 			if (keydown[keys.i]) {

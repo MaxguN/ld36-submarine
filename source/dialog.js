@@ -73,7 +73,6 @@ Dialog.prototype.Init = function (data, dialog) {
 	} else {
 		this.textbox.on('end', function () {
 			self.end();
-			self.textbox.Hide();
 		});
 	}
 }
@@ -89,9 +88,11 @@ Dialog.prototype.end = function (success) {
 		this.listeners.end.forEach(function (callback) {
 			callback(success);
 		});
-	} else {
-		this.Hide();
+
+		this.listeners.end = [];
 	}
+	
+	this.Hide();
 }
 
 Dialog.prototype.Hide = function () {
