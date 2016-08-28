@@ -8,6 +8,7 @@ function Animator(x, y, container) {
 	this.currentAnimation = null;
 	this.currentAnimationName = '';
 	this.mirrored = false;
+	this.isDisplayed = true;
 	this.currentState = 0;
 
 	this.container = container;
@@ -86,7 +87,9 @@ Animator.prototype.Init = function (data) {
 	this.currentAnimation.position = new PIXI.Point(this.x, this.y);
 	this.currentAnimation.play();
 
-	this.container.addChild(this.currentAnimation);
+	if (this.isDisplayed) {
+		this.container.addChild(this.currentAnimation);
+	}
 
 	this.loaded();
 }
@@ -131,10 +134,26 @@ Animator.prototype.GetRectangle = function () {
 	}
 }
 
+Animator.prototype.Hide = function () {
+	if (this.isDisplayed) {
+		this.container.removeChild(this.currentAnimation);
+		this.isDisplayed = false;
+	}
+}
+
+Animator.prototype.Display = function () {
+	if (!this.isDisplayed) {
+		this.container.addChild(this.currentAnimation);
+		this.isDisplayed = true;
+	}
+}
+
 Animator.prototype.UpdateAnim = function (animation, mirror) {
 	if (this.animations[this.currentState] && this.animations[this.currentState][animation]) {
 		if (this.animations[this.currentState][animation] !== this.currentAnimation || mirror !== this.mirrored) {
-			this.container.removeChild(this.currentAnimation);
+			if (this.isDisplayed) {
+				this.container.removeChild(this.currentAnimation);
+			}
 
 			this.currentAnimation = this.animations[this.currentState][animation];
 			this.currentAnimationName = animation;
@@ -144,7 +163,9 @@ Animator.prototype.UpdateAnim = function (animation, mirror) {
 
 			this.currentAnimation.play();
 
-			this.container.addChild(this.currentAnimation);
+			if (this.isDisplayed) {
+				this.container.addChild(this.currentAnimation);
+			}
 		}
 	}
 }

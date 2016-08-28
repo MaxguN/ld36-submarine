@@ -1,0 +1,28 @@
+{
+	"default" : "idle",
+	"animations" : {
+		"idle" : {
+			"frames" : [
+				{"tile" : 0},
+				{"tile" : 1},
+				{"tile" : 2},
+				{"tile" : 1}
+			],
+			"speed" : 20,
+			"loop" : true,
+			"loopto" : 0
+		}
+	},
+	"tilesets" : [
+		{
+			"file" : "attention.png",
+			"tilewidth" : 16,
+			"tileheight" : 16,
+			"imagewidth" : 48,
+			"imageheight" : 16,
+			"firstgid" : 0
+		}
+	],
+	"stateful" : false,
+	"states" : 0
+}

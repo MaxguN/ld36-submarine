@@ -1,20 +1,12 @@
-X - water tileset
-X - submarine sprite
-X - objective sprite
-X - level map
-X - loading level
-X - submarine object
-X - submarine movements
-X - collision system
-X - objective interaction
-X - text display
-X - dialog system
-X - underwater system
-X - island tileset
 	- inventory
 	- ennemy sprite (ship)
 	- combat system
-	- fog of war
-	- sonar system
+	- underwater riddles
+	- improve dialog (id)
 	- sfx
 	- music
+	- fix collisions
+	- inner land tileset
+	- redo LD
+	- fog of war
+	- sonar system

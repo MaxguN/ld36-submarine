@@ -1,14 +1,20 @@
 function SeaMark(x, y, level, number) {
 	Animator.call(this, x, y, level.map);
-	Collider.call(this, Tags.Seamark, [Tags.Player], new PIXI.Circle(x + level.tile.width / 2, y + level.tile.height / 2, 64));
+	Collider.call(this, Tags.Seamark, [Tags.Player], new PIXI.Circle(x, y, 64));
 
 	var self = this;
 
 	this.number = number;
 	this.level = level;
+	this.notification = new Animator(x, y - level.tile.height / 2, level.map);
 	this.dialog = new Dialog(level, 'puzzle' + number);
 
 	load.json('animations/seamark.json', function (data) {self.Init(data);});
+	load.json('animations/attention.json', function (data) {self.notification.Init(data);});
+
+	this.notification.on('load', function () {
+		self.notification.Hide();
+	});
 }
 
 SeaMark.prototype = Object.create(Animator.prototype);
@@ -17,15 +23,12 @@ SeaMark.prototype.constructor = SeaMark;
 SeaMark.prototype.SetInteractable = function (enable) {
 	if (!this.isInteractable && enable) {
 		this.level.SetInteractable(this);
-		// display notification
+		this.notification.Display();
 		this.isInteractable = true;
-
-		console.log('set interactable')
 	} else if (this.isInteractable && !enable) {
 		this.isInteractable = false;
-		// hide notification
+		this.notification.Hide();
 		this.level.SetInteractable(null);
-		console.log('set not interactable')
 	}
 }
 

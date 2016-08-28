@@ -1,6 +1,6 @@
 function Submarine(x, y, level) {
 	Animator.call(this, x, y, level.map);
-	Collider.call(this, Tags.Player, [Tags.Seamark], new PIXI.Circle(x + level.tile.width / 2, y + level.tile.height / 2, 16));
+	Collider.call(this, Tags.Player, [Tags.Seamark], new PIXI.Circle(x, y, 16));
 
 	var self = this;
 
@@ -37,8 +37,6 @@ Submarine.prototype.Collides = function (delta, length) {
 	var y = rectangle.y + delta.y;
 	var width = rectangle.width;
 	var height = rectangle.height;
-
-	// console.log(x +  ',' + y + ' | ' + width +'x' + height);
 
 	collisions = this.level.Collides(this.GetRectangle());
 
