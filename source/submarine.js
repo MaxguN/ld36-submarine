@@ -128,9 +128,17 @@ Submarine.prototype.Tick = function (length) {
 		// delta = this.Collides(delta, length);
 
 		if (delta.x || delta.y) {
-			this.SwitchToAnim('move');
+			if (keydown[keys.shift]) {
+				this.SwitchToAnim('move-underwater');
+			} else {
+				this.SwitchToAnim('move');
+			}
 		} else {
-			this.SwitchToAnim('idle');
+			if (keydown[keys.shift]) {
+				this.SwitchToAnim('idle-underwater');
+			} else {
+				this.SwitchToAnim('idle');
+			}
 		}
 
 		this.x += delta.x;

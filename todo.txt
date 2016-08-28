@@ -9,9 +9,9 @@ X - collision system
 X - objective interaction
 X - text display
 X - dialog system
-	- underwater system
-	- inventory
+X - underwater system
 X - island tileset
+	- inventory
 	- ennemy sprite (ship)
 	- combat system
 	- fog of war

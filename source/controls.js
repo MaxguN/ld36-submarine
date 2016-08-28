@@ -1,48 +1,69 @@
 var keys = {
-	escape : 27,
-	space : 32,
-	left : 37,
-	up : 38,
-	right : 39,
-	down : 40,
-	c : 67,
-	r : 82,
-	x : 88
+	escape : 'Escape',
+	space : 'Space',
+	ctrl : 'ControlLeft',
+	shift : 'ShiftLeft',
+	left : 'ArrowLeft',
+	up : 'ArrowUp',
+	right : 'ArrowRight',
+	down : 'ArrowDown',
+	w : 'KeyW',
+	a : 'KeyA',
+	s : 'KeyS',
+	d : 'KeyD',
+	c : 'KeyC',
+	r : 'KeyR',
+	x : 'KeyX'
 }
 
 var keydown = {};
 var diagValue = Math.sqrt(2) / 2;
 
+function preventDefault(event) {
+	switch (event.code) {
+		case keys.space :
+			console.log('prevent space')
+		case keys.up :
+		case keys.left :
+		case keys.down :
+		case keys.right :
+			event.preventDefault();
+	}
+}
+
 function onkeydown(event) {
-	if (keydown[event.keyCode] === undefined) {
-		keydown[event.keyCode] = true;
+	preventDefault(event);
+	if (keydown[event.code] === undefined) {
+		keydown[event.code] = true;
 	}
 }
 
 function onkeyup (event) {
-	delete keydown[event.keyCode];
+	preventDefault(event);
+	delete keydown[event.code];
 }
 
 function IsMoving() {
-	return (keydown[keys.left] || keydown[keys.right] || keydown[keys.up] || keydown[keys.down])
+	return (keydown[keys.left] || keydown[keys.right] || keydown[keys.up] || keydown[keys.down] ||
+			keydown[keys.w] || keydown[keys.a] || keydown[keys.s] || keydown[keys.d]);
 }
 
 function GetDirection() {
 	var direction = new PIXI.Point(0, 0);
 
-	if (keydown[keys.left]) {
+	if (keydown[keys.left] || keydown[keys.a]) {
 		direction.x -= 1;
 	}
 
-	if (keydown[keys.right]) {
+	if (keydown[keys.right] || keydown[keys.d]) {
 		direction.x += 1;
 	}
 
-	if (keydown[keys.up]) {
+	if (keydown[keys.up] || keydown[keys.w]) {
 		direction.y -= 1;
 	}
 
-	if (keydown[keys.down]) {
+	if (keydown[keys.down] || keydown[keys.s]) {
 		direction.y += 1;
 	}
 
@@ -130,4 +151,7 @@ document.addEventListener('keyup', onkeyup);
 renderer.view.addEventListener('mousedown', mouse.down);
 renderer.view.addEventListener('mousemove', mouse.move);
 renderer.view.addEventListener('mouseup', mouse.up);
+renderer.view.addEventListener('click', function () {window.focus()});
 renderer.view.oncontextmenu = function () { return false; }
+
+window.focus();
