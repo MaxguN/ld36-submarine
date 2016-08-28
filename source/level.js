@@ -71,6 +71,7 @@ Level.prototype.Init = function(level) {
 
 	var submarineid = -1;
 	var seamarkid = -1;
+	var islandid = -1;
 
 	this.json = level;
 
@@ -79,6 +80,10 @@ Level.prototype.Init = function(level) {
 			submarineid = tileset.firstgid;
 			seamarkid = tileset.firstgid + 1;
 		} else {
+			if (tileset.name === 'IslandTerrain') {
+				islandid = tileset.firstgid;
+			}
+
 			var uri = tileset.image;
 			var texture = new Image();
 			texture.src = uri
@@ -118,6 +123,55 @@ Level.prototype.Init = function(level) {
 
 					tile.position = new PIXI.Point(x, y);
 					this.map.addChild(tile);
+
+					switch (tileid) {
+						case islandid : // top left
+							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 1 : // top
+							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 2 : // top right
+							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 3 : // bottom right
+							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 4 : // bottom left
+							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 5 : // left
+							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 6 : // none
+							break;
+						case islandid + 7 : // right
+							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 8 : // top right
+							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 9 : // top left
+							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 10 : // bottom left
+							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 11 : // bottom
+							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+						case islandid + 12 : // bottom right
+							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							break;
+					}
 				}
 			}, this);
 		} else {
@@ -151,11 +205,6 @@ Level.prototype.Init = function(level) {
 	while (this.next.ready.length > 0) {
 		(this.next.ready.shift())();
 	}
-
-	// var dialog = new Dialog(this, "puzzle1");
-	// dialog.on('end', function (success) {
-	// 	console.log(success);
-	// })
 };
 
 Level.prototype.on = function(event, callback) {
@@ -225,7 +274,7 @@ Level.prototype.Interact = function () {
 	}
 }
 
-Level.prototype.Collides = function(rectangle) {
+Level.prototype.Collides = function(shape) {
 	function intersectRectangles(rectangle1, rectangle2) {
 		var r1 = {
 			left : rectangle1.x,
@@ -246,6 +295,19 @@ Level.prototype.Collides = function(rectangle) {
 				r2.bottom < r1.top);
 	}
 
+	function intersectRectangleCircle(rectangle, circle) {
+		var r = {
+			left : rectangle1.x,
+			right : rectangle1.x + rectangle1.width,
+			top : rectangle1.y,
+			bottom : rectangle1.y + rectangle1.height
+		};
+		
+
+		return (rectangle.contains(circle.x, circle.y) ||
+				false);
+	}
+
 	var collides = false;
 	var collisions = {
 		top : [],
@@ -254,14 +316,26 @@ Level.prototype.Collides = function(rectangle) {
 		right : []
 	};
 
-	for (var way in this.colliders) {
-		this.colliders[way].forEach(function (collider) {
-			if (intersectRectangles(rectangle, collider)) {
-				collides = true;
-				collisions[way].push(collider);
-			}
-		}, this);
+	if (shape.type === PIXI.SHAPES.RECT) {
+		for (var way in this.colliders) {
+			this.colliders[way].forEach(function (collider) {
+				if (intersectRectangles(collider, shape)) {
+					collides = true;
+					collisions[way].push(collider);
+				}
+			}, this);
+		}
+	} else if (shape.type === PIXI.SHAPES.CIRC) {
+		for (var way in this.colliders) {
+			this.colliders[way].forEach(function (collider) {
+				if (intersectRectangleCircle(collider, shape)) {
+					collides = true;
+					collisions[way].push(collider);
+				}
+			}, this);
+		}
 	}
+
 
 	return {
 		collides : collides,

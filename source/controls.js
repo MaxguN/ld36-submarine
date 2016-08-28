@@ -22,7 +22,6 @@ var diagValue = Math.sqrt(2) / 2;
 function preventDefault(event) {
 	switch (event.code) {
 		case keys.space :
-			console.log('prevent space')
 		case keys.up :
 		case keys.left :
 		case keys.down :

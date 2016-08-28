@@ -31,18 +31,12 @@ Submarine.prototype.constructor = Submarine;
 Submarine.prototype.Collides = function (delta, length) {
 	var collisions;
 
-	var x;
-	var y;
-	var width = this.currentAnimation.width;
-	var height = this.currentAnimation.height;
+	var rectangle = this.GetRectangle();
 
-	if (this.mirrored) {
-		x = this.x + delta.x - this.currentAnimation.width;
-		y = this.y + delta.y;
-	} else {
-		x = this.x + delta.x;
-		y = this.y + delta.y;
-	}
+	var x = rectangle.x + delta.x;
+	var y = rectangle.y + delta.y;
+	var width = rectangle.width;
+	var height = rectangle.height;
 
 	// console.log(x +  ',' + y + ' | ' + width +'x' + height);
 
@@ -51,11 +45,14 @@ Submarine.prototype.Collides = function (delta, length) {
 	if (collisions.collides) {
 		for (var way in collisions.colliders) {
 			collisions.colliders[way].forEach(function (collider) {
-				var under = (collider.y - (this.y + delta.y + this.currentAnimation.height)) < 0;
+				var insideTop = collider.y - (y + rectangle.height) < 0;
+				var insideBottom = collider.y + collider.height - y > 0;
+				var insideLeft = collider.x - (x + rectangle.width) < 0;
+				var insideRight = collider.x + collider.width - x > 0;
 
 				if (way === 'right') {
-					if (under && delta.x < 0) { // left
-						var dx = (collider.x + collider.width - (this.x - this.currentAnimation.width))
+					if (delta.x < 0) { // left
+						var dx = collider.x + collider.width - rectangle.x
 
 						if (dx > delta.x) {
 							delta.x = dx;
@@ -64,8 +61,8 @@ Submarine.prototype.Collides = function (delta, length) {
 				}
 
 				if (way === 'left') {
-					if (under && delta.x > 0) { // right
-						var dx = collider.x - (this.x + this.currentAnimation.width);
+					if (delta.x > 0) { // right
+						var dx = collider.x - (rectangle.x + rectangle.width);
 
 						if (dx < delta.x) {
 							delta.x = dx;
@@ -74,12 +71,21 @@ Submarine.prototype.Collides = function (delta, length) {
 				}
 
 				if (way === 'top') {
-					if (under && this.vy < 0) {
-						var dy = collider.y - (this.y + this.currentAnimation.height);
+					if (delta.y > 0) {
+						var dy = collider.y - (rectangle.y + rectangle.height);
 
 						if (dy < delta.y) {
 							delta.y = dy;
-							this.vy = 0;
+						}
+					}
+				}
+
+				if (way === 'bottom') {
+					if (delta.y < 0) {
+						var dy = collider.y + collider.height - rectangle.y;
+
+						if (dy > delta.y) {
+							delta.y = dy;
 						}
 					}
 				}
@@ -125,7 +131,7 @@ Submarine.prototype.Tick = function (length) {
 		delta.x *= this.speed * length;
 		delta.y *= this.speed * length;
 
-		// delta = this.Collides(delta, length);
+		delta = this.Collides(delta, length);
 
 		if (delta.x || delta.y) {
 			if (keydown[keys.shift]) {
