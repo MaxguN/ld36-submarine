@@ -1,11 +1,18 @@
-	- inventory
+X - sextant assets
+x - inventory
+	- assembly
 	- ennemy sprite (ship)
 	- combat system
 	- underwater riddles
+	- timer riddle
 	- improve dialog (id)
+	- spawn seamarks random
+	- respawn seamarks
 	- sfx
 	- music
 	- fix collisions
+	- menu
+	- ending
 	- inner land tileset
 	- redo LD
 	- fog of war

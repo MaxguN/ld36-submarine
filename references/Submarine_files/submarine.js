@@ -16,8 +16,6 @@ function Submarine(x, y, level) {
 	// this.shotCount = 0;
 	// this.shotThreshold = 10;
 
-	this.inventory = new Inventory('sextant', level);
-
 	this.level = level;
 
 	this.on('load', function () {
@@ -110,19 +108,8 @@ Submarine.prototype.Interact = function () {
 	}
 }
 
-Submarine.prototype.Inventory = function () {
-	if (this.inventory.IsOpened()) {
-		this.inventory.Hide();
-		this.Unlock();
-	} else {
-		this.Lock();
-		this.inventory.Display();
-	}
-}
-
 Submarine.prototype.Success = function (seamark) {
-	this.inventory.ItemUnlock(seamark.number);
-	seamark.Lock();
+	console.log('success');
 }
 
 Submarine.prototype.Failure = function (seamark) {
@@ -130,58 +117,46 @@ Submarine.prototype.Failure = function (seamark) {
 }
 
 Submarine.prototype.Tick = function (length) {
-	if (this.isLoaded) {
-		if (!this.locked) {
-			var delta = GetDirection();
-			
-			if (IsMoving()) {
-				this.rotation = Math.PI / 2 - Math.acos(delta.x) * (delta.y ? -Math.sign(delta.y) : 1);
-			}
+	if (this.isLoaded && !this.locked) {
+		var delta = GetDirection();
+		
+		if (IsMoving()) {
+			this.rotation = Math.PI / 2 - Math.acos(delta.x) * (delta.y ? -Math.sign(delta.y) : 1);
+		}
 
-			this.currentAnimation.rotation = this.rotation;
+		this.currentAnimation.rotation = this.rotation;
 
-			delta.x *= this.speed * length;
-			delta.y *= this.speed * length;
+		delta.x *= this.speed * length;
+		delta.y *= this.speed * length;
 
-			delta = this.Collides(delta, length);
+		delta = this.Collides(delta, length);
 
-			if (delta.x || delta.y) {
-				if (keydown[keys.shift]) {
-					this.SwitchToAnim('move-underwater');
-				} else {
-					this.SwitchToAnim('move');
-				}
+		if (delta.x || delta.y) {
+			if (keydown[keys.shift]) {
+				this.SwitchToAnim('move-underwater');
 			} else {
-				if (keydown[keys.shift]) {
-					this.SwitchToAnim('idle-underwater');
-				} else {
-					this.SwitchToAnim('idle');
-				}
-			}
-
-			this.x += delta.x;
-			this.y += delta.y;
-
-			this.currentAnimation.position.x = this.x;
-			this.currentAnimation.position.y = this.y;
-			this.colliderShape.x = this.GetCenter().x;
-			this.colliderShape.y = this.GetCenter().y;
-
-			this.level.UpdateCamera(this.GetCenter());
-
-			if (keydown[keys.space]) {
-				this.Interact();
-			}
-
-			if (keydown[keys.i]) {
-				this.Inventory();
-				keydown[keys.i] = false;
+				this.SwitchToAnim('move');
 			}
 		} else {
-			if (keydown[keys.i] && this.inventory.IsOpened()) {
-				this.Inventory();
-				keydown[keys.i] = false;
+			if (keydown[keys.shift]) {
+				this.SwitchToAnim('idle-underwater');
+			} else {
+				this.SwitchToAnim('idle');
 			}
+		}
+
+		this.x += delta.x;
+		this.y += delta.y;
+
+		this.currentAnimation.position.x = this.x;
+		this.currentAnimation.position.y = this.y;
+		this.colliderShape.x = this.GetCenter().x;
+		this.colliderShape.y = this.GetCenter().y;
+
+		this.level.UpdateCamera(this.GetCenter());
+
+		if (keydown[keys.space]) {
+			this.Interact();
 		}
 	}
 }

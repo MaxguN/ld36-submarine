@@ -5,7 +5,6 @@ function SeaMark(x, y, level, number) {
 	var self = this;
 
 	this.number = number;
-	this.locked = false;
 	this.level = level;
 	this.notification = new Animator(x, y - level.tile.height / 2, level.map);
 	this.dialog = new Dialog(level, 'puzzle' + number);
@@ -38,11 +37,6 @@ SeaMark.prototype.LaunchDialog = function (callback) {
 	this.dialog.Display();
 }
 
-SeaMark.prototype.Lock = function () {
-	this.SetInteractable(false);
-	this.locked = true;
-}
-
 SeaMark.prototype.Collides = function () {
 	function intersectCircles(circle1, circle2) {
 		return Math.sqrt(Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2)) < circle1.radius + circle2.radius;
@@ -61,7 +55,7 @@ SeaMark.prototype.Collides = function () {
 }
 
 SeaMark.prototype.Tick = function (length) {
-	if (this.isLoaded && !this.locked) {
+	if (this.isLoaded) {
 		this.Collides()
 	}
 }

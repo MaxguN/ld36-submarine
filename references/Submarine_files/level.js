@@ -176,10 +176,10 @@ Level.prototype.Init = function(level) {
 			}, this);
 		} else {
 			if (layer.name === 'Placeholders') {
-				var count = 0;
 				layer.data.forEach(function (tileid, index) {
 					var x = index % layer.width;
 					var y = Math.floor(index / layer.width);
+					var count = 0;
 
 					switch (tileid) {
 						case submarineid :

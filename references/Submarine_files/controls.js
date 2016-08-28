@@ -11,7 +11,6 @@ var keys = {
 	a : 'KeyA',
 	s : 'KeyS',
 	d : 'KeyD',
-	i : 'KeyI',
 	c : 'KeyC',
 	r : 'KeyR',
 	x : 'KeyX'
