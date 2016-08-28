@@ -1,5 +1,5 @@
 function Submarine(x, y, level) {
-	Animator.call(this, x, y, level.map);
+	Animator.call(this, x + 16, y + 16, level.map);
 	Collider.call(this, Tags.Player, [Tags.Seamark], new PIXI.Circle(x, y, 16));
 
 	var self = this;
@@ -129,7 +129,9 @@ Submarine.prototype.Success = function (seamark) {
 }
 
 Submarine.prototype.Failure = function (seamark) {
-	// console.log('failure');
+	if (seamark) {
+		this.level.RespawnSeamark(seamark);
+	}
 }
 
 Submarine.prototype.Tick = function (length) {
@@ -167,10 +169,10 @@ Submarine.prototype.Tick = function (length) {
 
 			this.currentAnimation.position.x = this.x;
 			this.currentAnimation.position.y = this.y;
-			this.colliderShape.x = this.GetCenter().x;
-			this.colliderShape.y = this.GetCenter().y;
+			this.colliderShape.x = this.x;
+			this.colliderShape.y = this.y;
 
-			this.level.UpdateCamera(this.GetCenter());
+			this.level.UpdateCamera(new PIXI.Point(this.x, this.y));
 
 			if (keydown[keys.space]) {
 				this.Interact();

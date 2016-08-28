@@ -1,9 +1,11 @@
 {
 	"entrypoint" : "dialog1",
 	"dialog1" : {
-		"text" : [
-			"When voices look for inspiration, it represents the ultimate reference.\nWhen voices imitate one another, it forms new musical patterns.\nWhen voices disagree and go at war, it fires louder than them."
-		],
+		"dialog" : {
+			"text" : [
+				["", "When voices look for inspiration, it represents the ultimate reference.\nWhen voices imitate one another, it forms new musical patterns.\nWhen voices disagree and go at war, it fires louder than them."]
+			]
+		},
 		"choices" : [
 			"The Cannon",
 			"The Gun",
@@ -16,13 +18,17 @@
 		]
 	},
 	"answer1" : {
-		"text" : [
-			"Yup"
-		]
+		"dialog" : {
+			"text" : [
+				["", "Yup"]
+			]
+		}
 	},
 	"answer2" : {
-		"text" : [
-			"Nope"
-		]
+		"dialog" : {
+			"text" : [
+				["", "Nope"]
+			]
+		}
 	}
 }

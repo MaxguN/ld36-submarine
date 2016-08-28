@@ -1,0 +1,34 @@
+{
+	"default" : "idle",
+	"animations" : {
+		"idle" : {
+			"frames" : [
+				{"tile" : 0}
+			],
+			"speed" : 20,
+			"loop" : true,
+			"loopto" : 0
+		},
+		"move" : {
+			"frames" : [
+				{"tile" : 1},
+				{"tile" : 2}
+			],
+			"speed" : 20,
+			"loop" : true,
+			"loopto" : 0
+		}
+	},
+	"tilesets" : [
+		{
+			"file" : "boat.png",
+			"tilewidth" : 32,
+			"tileheight" : 32,
+			"imagewidth" : 96,
+			"imageheight" : 32,
+			"firstgid" : 0
+		}
+	],
+	"stateful" : false,
+	"states" : 0
+}

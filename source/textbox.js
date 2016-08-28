@@ -1,7 +1,8 @@
-function TextBox(level, pages) {
+function TextBox(level, data) {
 	this.level = level;
 
 	this.rectangle = new PIXI.Graphics();
+	this.identities = {};
 	this.container = new PIXI.Container();
 
 	this.pages = [];
@@ -13,10 +14,10 @@ function TextBox(level, pages) {
 		end : []
 	}
 
-	this.Init(pages);
+	this.Init(data);
 }
 
-TextBox.prototype.Init = function (pages) {
+TextBox.prototype.Init = function (data) {
 	var self = this;
 
 	this.rectangle.beginFill(0x000000, 1);
@@ -25,8 +26,8 @@ TextBox.prototype.Init = function (pages) {
 
 	this.container.addChild(this.rectangle);
 
-	pages.forEach(function (page) {
-		var text = new PIXI.Text(page, {fontFamily : 'Arial', fontSize: 18, fill : 0xDDDDDD, wordWrap : true, wordWrapWidth : 760});
+	data.text.forEach(function (page) {
+		var text = new PIXI.Text(page[1], {fontFamily : 'Arial', fontSize: 18, fill : 0xDDDDDD, wordWrap : true, wordWrapWidth : 760});
 		text.position = new PIXI.Point(20,360);
 		this.pages.push(text);
 	}, this);

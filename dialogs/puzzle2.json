@@ -1,9 +1,11 @@
 {
 	"entrypoint" : "dialog1",
 	"dialog1" : {
-		"text" : [
-			"On top of a big one, you can see far away.\nOn two or four or more, you can travel a long way.\nBut you only need one, to decide by which way."
-		],
+		"dialog" : {
+			"text" : [
+				["", "On top of a big one, you can see far away.\nOn two or four or more, you can travel a long way.\nBut you only need one, to decide by which way."]
+			]
+		},
 		"choices" : [
 			"The Car",
 			"The Road",
@@ -16,13 +18,17 @@
 		]
 	},
 	"answer1" : {
-		"text" : [
-			"Yup"
-		]
+		"dialog" : {
+			"text" : [
+				["", "Yup"]
+			]
+		}
 	},
 	"answer2" : {
-		"text" : [
-			"Nope"
-		]
+		"dialog" : {
+			"text" : [
+				["", "Nope"]
+			]
+		}
 	}
 }

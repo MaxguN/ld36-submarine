@@ -24,7 +24,7 @@ Dialog.prototype.Init = function (data, dialog) {
 	if (!dialog) {
 		dialog = data.entrypoint;
 	}
-	this.textbox = new TextBox(this.level, data[dialog].text);
+	this.textbox = new TextBox(this.level, data[dialog].dialog);
 
 	if (data[dialog].choices) {
 		var height = data[dialog].choices.length * this.choiceHeight + (data[dialog].choices.length - 1) * this.choiceSpace;
@@ -74,6 +74,10 @@ Dialog.prototype.Init = function (data, dialog) {
 		this.textbox.on('end', function () {
 			self.end();
 		});
+	}
+
+	if (this.file === 'test') {
+		this.Display();
 	}
 }
 

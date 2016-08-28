@@ -31,6 +31,8 @@ function Level(name, renderer) {
 	this.interactable = null;
 	this.end = -1;
 
+	this.riddles = 4;
+	this.locations = [];
 	this.objects = {};
 	for (var tag in Tags) {
 		this.objects[Tags[tag]] = [];
@@ -71,6 +73,8 @@ Level.prototype.Init = function(level) {
 
 	var submarineid = -1;
 	var seamarkid = -1;
+	var boatid = -1;
+	var boatProperties = {};
 	var islandid = -1;
 
 	this.json = level;
@@ -79,6 +83,8 @@ Level.prototype.Init = function(level) {
 		if (tileset.name === 'Placeholders') {
 			submarineid = tileset.firstgid;
 			seamarkid = tileset.firstgid + 1;
+			boatid = tileset.firstgid + 4;
+			boatProperties = tileset.tileproperties;
 		} else {
 			if (tileset.name === 'IslandTerrain') {
 				islandid = tileset.firstgid;
@@ -176,7 +182,6 @@ Level.prototype.Init = function(level) {
 			}, this);
 		} else {
 			if (layer.name === 'Placeholders') {
-				var count = 0;
 				layer.data.forEach(function (tileid, index) {
 					var x = index % layer.width;
 					var y = Math.floor(index / layer.width);
@@ -189,14 +194,27 @@ Level.prototype.Init = function(level) {
 							this.AddObject(this.submarine);
 							break;
 						case seamarkid :
-							this.AddObject(new SeaMark(x * level.tilewidth, y * level.tileheight, this, count));
-							count += 1;
+							this.locations.push({x : x * level.tilewidth, y : y * level.tileheight, used : false});
 							break;
+					}
+
+					if (tileid >= boatid) {
+						this.AddObject(new Boat(x * level.tilewidth, y * level.tileheight, this, boatProperties[tileid - submarineid].Rotation));
 					}
 				}, this);
 			}
 		}
 	}, this);
+
+	for (var i = 0; i < this.riddles; i += 1) {
+		var location;
+		do {
+			location = this.locations[Math.floor(Math.random() * this.locations.length)];
+		} while (location.used);
+
+		this.AddObject(new SeaMark(location.x, location.y, this, i, location));
+		location.used = true;
+	}
 
 	this.loaded = true;
 	this.listeners.ready.forEach(function (listener) {
@@ -205,6 +223,8 @@ Level.prototype.Init = function(level) {
 	while (this.next.ready.length > 0) {
 		(this.next.ready.shift())();
 	}
+
+	var dialog = new Dialog(this, 'test');
 };
 
 Level.prototype.on = function(event, callback) {
@@ -233,13 +253,28 @@ Level.prototype.win = function() {
 	});
 };
 
+Level.prototype.RespawnSeamark = function (seamark) {
+	var location;
+
+	do {
+		location = this.locations[Math.floor(Math.random() * this.locations.length)];
+	} while (location.used);
+
+	seamark.location.used = false;
+	seamark.location = location;
+
+	seamark.Move(location.x, location.y);
+
+	location.used = true;
+}
+
 Level.prototype.CenterCamera = function (point) {
 	this.map.x = -Math.min(Math.max(0, point.x - this.renderer.width / 2), this.map.width - this.renderer.width);
 	this.map.y = -Math.min(Math.max(0, point.y - this.renderer.height / 2), this.map.height - this.renderer.height);
 }
 
 Level.prototype.UpdateCamera = function(point) {
-	var space = 32;
+	var space = 0;
 
 	if (-this.map.x > point.x + space - this.renderer.width / 2) { // left border
 		this.map.x = Math.round(-Math.min(Math.max(0, point.x + space - this.renderer.width / 2), this.map.width - this.renderer.width));

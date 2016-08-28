@@ -1,9 +1,11 @@
 {
 	"entrypoint" : "dialog1",
 	"dialog1" : {
-		"text" : [
-			"An instrument that plays no music, a needle that needs no thread.\nSome with legs, help the drawer find their way across paper.\nSome without, help the traveler find their way across the land."
-		],
+		"dialog" : {
+			"text" : [
+				["", "An instrument that plays no music, a needle that needs no thread.\nSome with legs, help the drawer find their way across paper.\nSome without, help the traveler find their way across the land."]
+			]
+		},
 		"choices" : [
 			"The Watch",
 			"The Compass",
@@ -16,13 +18,17 @@
 		]
 	},
 	"answer1" : {
-		"text" : [
-			"Yup"
-		]
+		"dialog" : {
+			"text" : [
+				["", "Yup"]
+			]
+		}
 	},
 	"answer2" : {
-		"text" : [
-			"Nope"
-		]
+		"dialog" : {
+			"text" : [
+				["", "Nope"]
+			]
+		}
 	}
 }

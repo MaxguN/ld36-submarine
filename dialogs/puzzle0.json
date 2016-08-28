@@ -1,9 +1,11 @@
 {
 	"entrypoint" : "dialog1",
 	"dialog1" : {
-		"text" : [
-			"Even though it has sails, it does not move from its hill.\nEven though it has blades, it is useless to go tilting at it.\nEven though it grinds, it has no teeth to eat."
-		],
+		"dialog" : {
+			"text" : [
+				["", "Even though it has sails, it does not move from its hill.\nEven though it has blades, it is useless to go tilting at it.\nEven though it grinds, it has no teeth to eat."]
+			]
+		},
 		"choices" : [
 			"The Lighthouse",
 			"The Windmill",
@@ -16,13 +18,17 @@
 		]
 	},
 	"answer1" : {
-		"text" : [
-			"Yup"
-		]
+		"dialog" : {
+			"text" : [
+				["", "Yup"]
+			]
+		}
 	},
 	"answer2" : {
-		"text" : [
-			"Nope"
-		]
+		"dialog" : {
+			"text" : [
+				["", "Nope"]
+			]
+		}
 	}
 }
