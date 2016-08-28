@@ -9,6 +9,7 @@ function Inventory(item, level) {
 
 	this.parts = [];
 	this.grabbed = null;
+	this.attached = [];
 
 	this.listeners = {
 		grab : function () {},
@@ -31,7 +32,12 @@ Inventory.prototype.Init = function (item) {
 	item.parts.forEach(function (part, index) {
 		this.parts[index] = PIXI.Sprite.fromImage('textures/' + item.name + '/' + part.image);
 		this.parts[index].scale = new PIXI.Point(0.5, 0.5);
+		this.parts[index].index = index;
 		this.parts[index].locked = true;
+		this.parts[index].attach = part.attach;
+		this.parts[index].attached = [];
+
+		// this.ItemUnlock(index);
 	}, this);
 
 	this.listeners.grab = function (event) {
@@ -39,6 +45,33 @@ Inventory.prototype.Init = function (item) {
 			self.parts.some(function (part) {
 				if (!part.locked && part.containsPoint(mouse)) {
 					self.grabbed = part;
+					self.attached.push(part);
+
+					var attached = [];
+					var newAttached = part.attached;
+
+					do {
+						attached = newAttached;
+						newAttached = [];
+
+						self.attached.forEach(function (element) {
+							var index;
+
+							do {
+								index = attached.indexOf(element);
+
+								if (index > -1) {
+									attached.splice(index, 1);
+								}
+							} while (index > -1);
+						});
+
+						attached.forEach(function (element) {
+							self.attached.push(element);
+							newAttached = newAttached.concat(element.attached);
+						});
+					} while (attached.length);
+
 					return true;
 				}
 			});
@@ -46,13 +79,44 @@ Inventory.prototype.Init = function (item) {
 	};
 	this.listeners.move = function (event) {
 		if (mouse.left && self.grabbed) {
-			self.grabbed.x += event.movementX;
-			self.grabbed.y += event.movementY;
+			self.attached.forEach(function (part) {
+				part.x += event.movementX;
+				part.y += event.movementY;
+			});
 		}
 	};
 	this.listeners.release = function (event) {
 		if (event.button === 0) {
+			self.grabbed.attach.forEach(function (attach) {
+				if (!self.parts[attach.part].locked && self.grabbed.attached.indexOf(self.parts[attach.part]) === -1) {
+					self.parts[attach.part].attach.some(function (otherAttach) {
+						if (otherAttach.part === self.grabbed.index) {
+
+							var x = self.grabbed.x + attach.x / 2;
+							var y = self.grabbed.y + attach.y / 2;
+							var ox = self.parts[attach.part].x + otherAttach.x / 2;
+							var oy = self.parts[attach.part].y + otherAttach.y / 2;
+
+							var circle = new PIXI.Circle(ox, oy, otherAttach.r / 2);
+
+							if (circle.contains(x, y)) {
+								self.attached.forEach(function (part) {
+									part.x += ox - x;
+									part.y += oy - y;
+								});
+
+								self.grabbed.attached.push(self.parts[attach.part]);
+								self.parts[attach.part].attached.push(self.grabbed);
+							}
+
+							return true;
+						}
+					});
+				}
+			});
+
 			self.grabbed = null;
+			self.attached = [];
 		}
 	};
 }

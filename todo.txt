@@ -1,11 +1,11 @@
 X - sextant assets
 x - inventory
-	- assembly
+X - assembly
 	- ennemy sprite (ship)
 	- combat system
 	- underwater riddles
 	- timer riddle
-	- improve dialog (id)
+	- improve dialog (speaker)
 	- spawn seamarks random
 	- respawn seamarks
 	- sfx
