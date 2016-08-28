@@ -25,23 +25,26 @@
 				["CA", "A riddle? That’s the safety measure you…."],
 				["AD", "Don’t ask. This is a dangerous mission. /// ships are patrolling the perimeter. And there’s no telling what will happen once the object is on board."]
 			],
-			"characters" : {
-				"CO" : {
+			"characters" : [
+				{
+					"id" : "CO",
 					"name" : "Communication Officer",
 					"image" : "communication_officer.png",
 					"side" : "right"
 				},
-				"CA" : {
+				{
+					"id" : "CA",
 					"name" : "Captain",
 					"image" : "captain.png",
 					"side" : "left"
 				},
-				"AD" : {
+				{
+					"id" : "AD",
 					"name" : "Admiral",
 					"image" : "admiral.png",
 					"side" : "right"
 				}
-			}
+			]
 		}
 	}
 }

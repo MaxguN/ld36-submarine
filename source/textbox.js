@@ -29,8 +29,46 @@ TextBox.prototype.Init = function (data) {
 	data.text.forEach(function (page) {
 		var text = new PIXI.Text(page[1], {fontFamily : 'Arial', fontSize: 18, fill : 0xDDDDDD, wordWrap : true, wordWrapWidth : 760});
 		text.position = new PIXI.Point(20,360);
-		this.pages.push(text);
+		this.pages.push([page[0], text]);
 	}, this);
+
+	if (data.characters) {
+		data.characters.forEach(function (character) {
+			var identity = new PIXI.Container();
+			var nametag = new PIXI.Graphics();
+			var text = new PIXI.Text(character.name, {fontFamily : 'Arial', fontSize: 18, fill : 0xDDDDDD});
+			var side = character.side ? character.side : 'left';
+			var portrait;
+
+			var x = side === 'left' ? 15 : 785 - (text.width + 10);
+
+			nametag.beginFill(0x000000, 1);
+			nametag.lineStyle(2, 0xcccccc, 1);
+			nametag.drawRoundedRect(x, 325, text.width + 10, 30, 5);
+
+			text.position = new PIXI.Point(x + 5, 330);
+
+			if (character.image) {
+				portrait = PIXI.Sprite.fromImage('textures/Characters/' + character.image);
+				
+				if (side === 'left') {
+					portrait.scale = new PIXI.Point(0.5,0.5);
+				} else {
+					x = 790;
+					portrait.scale = new PIXI.Point(-0.5,0.5);
+				}
+
+				portrait.position = new PIXI.Point(x, 350 - 200);
+
+				identity.addChild(portrait);
+			}
+
+			identity.addChild(nametag);
+			identity.addChild(text);
+
+			this.identities[character.id] = identity;
+		}, this);
+	}
 
 	this.listener = function (event) {
 		if (event.button === 0) {
@@ -67,20 +105,35 @@ TextBox.prototype.Reset = function () {
 	this.index = 0;
 
 	if (this.pages.length) {
-		this.container.addChild(this.pages[this.index]);
+		this.container.addChild(this.pages[this.index][1]);
+		if (this.pages[this.index][0]) {
+			this.container.addChild(this.identities[this.pages[this.index][0]]);
+		}
 	}
 }
 
 TextBox.prototype.NextPage = function () {
-	this.container.removeChild(this.pages[this.index]);
+	if (this.pages[this.index][0]) {
+		this.container.removeChild(this.identities[this.pages[this.index][0]]);
+	}
+	this.container.removeChild(this.pages[this.index][1]);
 	this.index += 1;
-	this.container.addChild(this.pages[this.index])
+	this.container.addChild(this.pages[this.index][1])
+	if (this.pages[this.index][0]) {
+		this.container.addChild(this.identities[this.pages[this.index][0]]);
+	}
 }
 
 TextBox.prototype.PreviousPage = function () {
-	this.container.removeChild(this.pages[this.index]);
+	if (this.pages[this.index][0]) {
+		this.container.removeChild(this.identities[this.pages[this.index][0]]);
+	}
+	this.container.removeChild(this.pages[this.index][1]);
 	this.index -= 1;
-	this.container.addChild(this.pages[this.index]);
+	this.container.addChild(this.pages[this.index][1]);
+	if (this.pages[this.index][0]) {
+		this.container.addChild(this.identities[this.pages[this.index][0]]);
+	}
 }
 
 TextBox.prototype.Unlock = function () {
@@ -94,7 +147,10 @@ TextBox.prototype.Lock = function () {
 TextBox.prototype.Hide = function () {
 	this.Lock();
 	this.level.gui.removeChild(this.container);
-	this.container.removeChild(this.pages[this.index]);
+	this.container.removeChild(this.pages[this.index][1]);
+	if (this.pages[this.index][0]) {
+		this.container.removeChild(this.identities[this.pages[this.index][0]]);
+	}
 }
 
 TextBox.prototype.Display = function () {

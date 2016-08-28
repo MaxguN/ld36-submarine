@@ -1,6 +1,6 @@
 X - spawn seamark random
 X - respawn seamarks
-	- improve dialog (speaker)
+X - improve dialog (speaker)
 	- menu
 	- ending
 
