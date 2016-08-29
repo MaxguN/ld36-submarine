@@ -8,13 +8,8 @@ function Submarine(x, y, level) {
 
 	this.rotation = 0;
 	this.speed = 256; // pixels/second
-	// this.rateOfFire = 5; // shoots / second
 
-	// this.delayShoot = 1 / this.rateOfFire; // seconds
-	// this.timerShoot = 0;
-
-	// this.shotCount = 0;
-	// this.shotThreshold = 10;
+	this.dialogs = [];
 
 	this.inventory = new Inventory('sextant', level);
 
@@ -25,10 +20,17 @@ function Submarine(x, y, level) {
 	})
 
 	load.json('animations/submarine.json', function (data) {self.Init(data);});
+	this.InitDialogs();
 }
 
 Submarine.prototype = Object.create(Animator.prototype);
 Submarine.prototype.constructor = Submarine;
+
+Submarine.prototype.InitDialogs = function () {
+	for (var i = 0; i < this.level.riddles; i += 1) {
+		this.dialogs.push(new Dialog(this.level, 'part' + i));
+	}
+}
 
 Submarine.prototype.Collides = function (delta, length) {
 	var collisions;
@@ -125,6 +127,7 @@ Submarine.prototype.Success = function (seamark) {
 		// console.log('unlocked item ' + seamark.number)
 		this.inventory.ItemUnlock(seamark.number);
 		seamark.Lock();
+		this.dialogs[this.inventory.unlocked - 1].Display();
 	}
 }
 

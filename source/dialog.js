@@ -76,7 +76,7 @@ Dialog.prototype.Init = function (data, dialog) {
 		});
 	}
 
-	if (this.file === 'test') {
+	if (this.file === 'introduction') {
 		this.Display();
 	}
 }

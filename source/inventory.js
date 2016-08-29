@@ -7,6 +7,7 @@ function Inventory(item, level) {
 	this.rectangle = new PIXI.Graphics();
 	this.container = new PIXI.Container();
 
+	this.unlocked = 0;
 	this.parts = [];
 	this.grabbed = null;
 	this.attached = [];
@@ -107,6 +108,39 @@ Inventory.prototype.Init = function (item) {
 
 								self.grabbed.attached.push(self.parts[attach.part]);
 								self.parts[attach.part].attached.push(self.grabbed);
+
+								var count = [self.parts[0]];
+								var attached = [];
+								var newAttached = self.parts[0].attached;
+
+								do {
+									attached = newAttached;
+									newAttached = [];
+
+									count.forEach(function (element) {
+										var index;
+
+										do {
+											index = attached.indexOf(element);
+
+											if (index > -1) {
+												attached.splice(index, 1);
+											}
+										} while (index > -1);
+									});
+
+									attached.forEach(function (element) {
+										count.push(element);
+										newAttached = newAttached.concat(element.attached);
+									});
+								} while (attached.length);
+
+								console.log(count.length, self.level.riddles)
+								if (count.length === self.level.riddles) { // Victory!
+									self.container.removeChild(self.rectangle);
+									self.Lock();
+									self.level.Victory();
+								}
 							}
 
 							return true;
@@ -129,6 +163,7 @@ Inventory.prototype.ItemUnlock = function (index) {
 		this.parts[index].position = new PIXI.Point(x, y);
 		this.container.addChild(this.parts[index]);
 		this.parts[index].locked = false;
+		this.unlocked += 1;
 	}
 }
 

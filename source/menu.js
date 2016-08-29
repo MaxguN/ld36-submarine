@@ -36,6 +36,7 @@ Menu.prototype.Init = function (data) {
 	main.listener = function (event) {
 		if (event.button === 0) {
 			if (button_play.collider.contains(mouse.x, mouse.y)) {
+				self.SwitchTo();
 				self.Play();
 			} else if (button_controls.collider.contains(mouse.x, mouse.y)) {
 				self.SwitchTo('controls');
@@ -129,8 +130,10 @@ Menu.prototype.SwitchTo = function (screen) {
 		mouse.off('click', this.screens[index].listener);
 	}
 
-	this.container.addChild(this.screens[screen].screen);
-	mouse.on('click', this.screens[screen].listener);
+	if (screen) {
+		this.container.addChild(this.screens[screen].screen);
+		mouse.on('click', this.screens[screen].listener);
+	}
 }
 
 Menu.prototype.Play = function () {

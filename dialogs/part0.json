@@ -1,0 +1,33 @@
+{
+	"entrypoint" : "dialog1",
+	"dialog1" : {
+		"dialog" : {
+			"text" : [
+				["CA", "All these risks for such a small thing? The Admiralty is even crazier than I thought."],
+				["", "Waw! According to these readings, this “small thing” radiates enough magic to power two ships…"],
+				["CA", "Well, if the Narwhal is ever hungry, we know what to feed it!"],
+				["", "No way you’re putting this anomaly of nature anywhere near my generator Captain!"]
+			],
+			"characters" : [
+				{
+					"id" : "CO",
+					"name" : "Lieutenant Blake",
+					"image" : "communication_officer.png",
+					"side" : "right"
+				},
+				{
+					"id" : "CA",
+					"name" : "Captain Tanyo",
+					"image" : "captain.png",
+					"side" : "left"
+				},
+				{
+					"id" : "AD",
+					"name" : "Admiral Costes",
+					"image" : "admiral.png",
+					"side" : "right"
+				}
+			]
+		}
+	}
+}

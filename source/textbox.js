@@ -52,13 +52,13 @@ TextBox.prototype.Init = function (data) {
 				portrait = PIXI.Sprite.fromImage('textures/Characters/' + character.image);
 				
 				if (side === 'left') {
-					portrait.scale = new PIXI.Point(0.5,0.5);
+					portrait.scale = new PIXI.Point(0.75,0.75);
 				} else {
 					x = 790;
-					portrait.scale = new PIXI.Point(-0.5,0.5);
+					portrait.scale = new PIXI.Point(-0.75,0.75);
 				}
 
-				portrait.position = new PIXI.Point(x, 350 - 200);
+				portrait.position = new PIXI.Point(x, 350 - 300);
 
 				identity.addChild(portrait);
 			}

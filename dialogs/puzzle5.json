@@ -3,31 +3,56 @@
 	"dialog1" : {
 		"dialog" : {
 			"text" : [
-				["", "Even though it has sails, it does not move from its hill.\nEven though it has blades, it is useless to go tilting at it.\nEven though it grinds, it has no teeth to eat."]
+				["CA", "Well, I’ve never been the best at riddles, but here we go..."],
+				["", "Before a first trip you break it, after a shipwreck you send it.\nYou can catch lightning with it, but can’t put the genie back in it.\nIn any case, you might find the truth at the bottom of it."]
+			],
+			"characters" : [
+				{
+					"id" : "CA",
+					"name" : "Captain Tanyo",
+					"image" : "captain.png",
+					"side" : "left"
+				}
 			]
 		},
 		"choices" : [
-			"The Lighthouse",
-			"The Windmill",
-			"??"
+			"The Bottle",
+			"The Vessel",
+			"The Lamp"
 		],
 		"followup" : [
-			{ "dialog" : "answer2", "result" : false },
 			{ "dialog" : "answer1", "result" : true },
+			{ "dialog" : "answer2", "result" : false },
 			{ "dialog" : "answer2", "result" : false }
 		]
 	},
 	"answer1" : {
 		"dialog" : {
 			"text" : [
-				["", "Yup"]
+				["CA", "The Beacon is opening. Quick, send someone to retrieve its content!"]
+			],
+			"characters" : [
+				{
+					"id" : "CA",
+					"name" : "Captain Tanyo",
+					"image" : "captain.png",
+					"side" : "left"
+				}
 			]
 		}
 	},
 	"answer2" : {
 		"dialog" : {
 			"text" : [
-				["", "Nope"]
+				["CA", "What… Argh, the Beacon teleported! No matter, we’ll look for it and get it right next time. Commander, punch it!"]
+			],
+			"characters" : [
+				{
+					"id" : "CA",
+					"name" : "Captain Tanyo",
+					"image" : "captain.png",
+					"side" : "left"
+				}
 			]
 		}
 	}

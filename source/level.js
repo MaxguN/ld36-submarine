@@ -31,7 +31,7 @@ function Level(name, renderer) {
 	this.interactable = null;
 	this.end = -1;
 
-	this.riddles = 4;
+	this.riddles = 6;
 	this.locations = [];
 	this.objects = {};
 	for (var tag in Tags) {
@@ -50,6 +50,7 @@ function Level(name, renderer) {
 		kill : []
 	};
 
+	this.victorySpeech = {};
 	this.ending = false;
 	this.over = false;
 
@@ -224,7 +225,12 @@ Level.prototype.Init = function(level) {
 		(this.next.ready.shift())();
 	}
 
-	var dialog = new Dialog(this, 'test');
+	this.victorySpeech = new Dialog(this, 'victory');
+	this.victorySpeech.on('end', function () {
+		currentScene = menu;
+		menu.SwitchTo('credits');
+	});
+	new Dialog(this, 'introduction');
 };
 
 Level.prototype.on = function(event, callback) {
@@ -307,6 +313,10 @@ Level.prototype.Interact = function () {
 	} else {
 		return false;
 	}
+}
+
+Level.prototype.Victory = function () {
+	this.victorySpeech.Display();
 }
 
 Level.prototype.Collides = function(shape) {

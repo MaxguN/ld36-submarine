@@ -2,7 +2,9 @@ X - spawn seamark random
 X - respawn seamarks
 X - improve dialog (speaker)
 X - menu
-	- ending
+X - integrate dialogs
+X - integrate riddles
+X - ending
 	- hints
 	- tutorial
 
