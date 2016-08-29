@@ -27,8 +27,13 @@ Submarine.prototype = Object.create(Animator.prototype);
 Submarine.prototype.constructor = Submarine;
 
 Submarine.prototype.InitDialogs = function () {
+	var self = this;
+
 	for (var i = 0; i < this.level.riddles; i += 1) {
 		this.dialogs.push(new Dialog(this.level, 'part' + i));
+		this.dialogs[i].on('end', function () {
+			self.Unlock();
+		});
 	}
 }
 
@@ -99,10 +104,12 @@ Submarine.prototype.Collides = function (delta, length) {
 }
 
 Submarine.prototype.Lock = function () {
+	console.log('locked')
 	this.locked = true;
 }
 
 Submarine.prototype.Unlock = function () {
+	console.log('unlocked')
 	this.locked = false;
 }
 
@@ -124,10 +131,10 @@ Submarine.prototype.Inventory = function () {
 
 Submarine.prototype.Success = function (seamark) {
 	if (seamark) {
-		// console.log('unlocked item ' + seamark.number)
 		this.inventory.ItemUnlock(seamark.number);
 		seamark.Lock();
 		this.dialogs[this.inventory.unlocked - 1].Display();
+		this.Lock();
 	}
 }
 

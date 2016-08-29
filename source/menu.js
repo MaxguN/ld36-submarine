@@ -51,7 +51,8 @@ Menu.prototype.Init = function (data) {
 	var controls = {};
 	controls.screen = new PIXI.Container();
 	var button_back_controls = new Button(new PIXI.Text('BACK', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 640, 434, 150, 36)
-	// images & text
+
+	controls.screen.addChild(PIXI.Sprite.fromImage('textures/tutorial.png'));
 	button_back_controls.AddTo(controls.screen);
 
 	controls.listener = function (event) {

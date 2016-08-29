@@ -4,6 +4,7 @@ function TextBox(level, data) {
 	this.rectangle = new PIXI.Graphics();
 	this.identities = {};
 	this.container = new PIXI.Container();
+	this.skip = null;
 
 	this.pages = [];
 	this.index = 0;
@@ -70,13 +71,34 @@ TextBox.prototype.Init = function (data) {
 		}, this);
 	}
 
+	if (this.pages.length > 2) {
+		var skip = new PIXI.Graphics();
+		var text = new PIXI.Text('Skip', {fontFamily : 'Arial', fontSize: 18, fill : 0xDDDDDD});
+
+		skip.beginFill(0x000000, 1);
+		skip.lineStyle(2, 0xcccccc, 1);
+		skip.drawRoundedRect(795 - text.width - 10, 445, text.width + 10, 30, 5);
+
+		this.skip = new PIXI.Rectangle(795 - text.width - 10, 445, text.width + 10, 30)
+
+		text.position = new PIXI.Point(790 - text.width, 450);
+
+		this.container.addChild(skip);
+		this.container.addChild(text);
+	}
+
 	this.listener = function (event) {
 		if (event.button === 0) {
-			if (self.index < self.pages.length - 1) {
-				self.NextPage();
-			} else if (self.index < self.pages.length) {
+			if (self.skip && self.skip.contains(mouse.x, mouse.y)) {
 				self.end();
+			} else {
+				if (self.index < self.pages.length - 1) {
+					self.NextPage();
+				} else if (self.index < self.pages.length) {
+					self.end();
+				}
 			}
+
 		} else if (event.button === 2) {
 			if (self.index > 0) {
 				self.PreviousPage();

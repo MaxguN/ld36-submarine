@@ -6,7 +6,7 @@ X - integrate dialogs
 X - integrate riddles
 X - ending
 	- hints
-	- tutorial
+X - tutorial
 
 	- redo LD
 	- refine sextant assets

@@ -230,7 +230,11 @@ Level.prototype.Init = function(level) {
 		currentScene = menu;
 		menu.SwitchTo('credits');
 	});
-	new Dialog(this, 'introduction');
+	var intro = new Dialog(this, 'introduction');
+	intro.on('end', function () {
+		self.submarine.Unlock();
+	});
+	this.submarine.Lock();
 };
 
 Level.prototype.on = function(event, callback) {
@@ -300,13 +304,13 @@ Level.prototype.Interact = function () {
 
 	if (this.interactable) {
 		this.interactable.LaunchDialog(function (success) {
+			self.submarine.Unlock();
+			
 			if (success) {
 				self.submarine.Success(self.interactable);
 			} else {
 				self.submarine.Failure(self.interactable);
 			}
-
-			self.submarine.Unlock();
 		});
 
 		return true;
@@ -316,6 +320,7 @@ Level.prototype.Interact = function () {
 }
 
 Level.prototype.Victory = function () {
+	this.submarine.Lock();
 	this.victorySpeech.Display();
 }
 
