@@ -103,11 +103,10 @@ var mouse = (function () {
 	}
 
 	function off(event, callback) {
-		for (var i = 0; i < listeners[event].length; i += 1) {
-			if (listeners[event][i] === callback) {
-				listeners[event].splice(i, 1);
-				break;
-			}
+		var index = listeners[event].indexOf(callback);
+
+		if (index !== -1) {
+			listeners[event].splice(index, 1);
 		}
 	}
 
@@ -145,13 +144,3 @@ var mouse = (function () {
 
 	return data;
 })();
-
-document.addEventListener('keydown', onkeydown);
-document.addEventListener('keyup', onkeyup);
-renderer.view.addEventListener('mousedown', mouse.down);
-renderer.view.addEventListener('mousemove', mouse.move);
-renderer.view.addEventListener('mouseup', mouse.up);
-renderer.view.addEventListener('click', function () {window.focus()});
-renderer.view.oncontextmenu = function () { return false; }
-
-window.focus();

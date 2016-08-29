@@ -6,6 +6,8 @@ function Button(text, x, y, width, height) {
 	this.width = width;
 	this.height = height;
 
+	this.collider = new PIXI.Rectangle(x, y, width, height);
+
 	this.text = text;
 
 	this.rectangle = new PIXI.Graphics()

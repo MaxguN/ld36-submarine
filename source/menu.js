@@ -16,28 +16,77 @@ function Menu(renderer) {
 }
 
 Menu.prototype.Init = function (data) {
-	// load background
-	// create screens (3-4)
-	// mainmenu
-	var main = new PIXI.Container();
-	main.addChild(PIXI.Sprite.fromImage('textures/background.png'));
+	var self = this;
+
+	//main
+	var main = {};
+	main.screen = new PIXI.Container();
 	var title = new PIXI.Text('Adventure aboard the Narwhal', {fontFamily : 'Arial', fontSize: 32, fill : 0xEEEEEE});
 	title.position = new PIXI.Point((800 - title.width) / 2, 50);
-	main.addChild(title);
 	var button_play = new Button(new PIXI.Text('PLAY', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 300, 196, 200, 36);
-	button_play.AddTo(main);
 	var button_controls = new Button(new PIXI.Text('CONTROLS', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 300, 242, 200, 36);
-	button_controls.AddTo(main);
 	var button_credits = new Button(new PIXI.Text('CREDITS', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 300, 288, 200, 36);
-	button_credits.AddTo(main);
+	
+	main.screen.addChild(PIXI.Sprite.fromImage('textures/background.png'));
+	main.screen.addChild(title);
+	button_play.AddTo(main.screen);
+	button_controls.AddTo(main.screen);
+	button_credits.AddTo(main.screen);
+
+	main.listener = function (event) {
+		if (event.button === 0) {
+			if (button_play.collider.contains(mouse.x, mouse.y)) {
+				self.Play();
+			} else if (button_controls.collider.contains(mouse.x, mouse.y)) {
+				self.SwitchTo('controls');
+			} else if (button_credits.collider.contains(mouse.x, mouse.y)) {
+				self.SwitchTo('credits');
+			}
+		}
+	};
+	
+
 	// controls
-	var controls = new PIXI.Container();
+	var controls = {};
+	controls.screen = new PIXI.Container();
+	var button_back_controls = new Button(new PIXI.Text('BACK', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 640, 434, 150, 36)
 	// images & text
-	// backbutton
+	button_back_controls.AddTo(controls.screen);
+
+	controls.listener = function (event) {
+		if (event.button === 0) {
+			if (button_back_controls.collider.contains(mouse.x, mouse.y)) {
+				self.SwitchTo('main');
+			}
+		}
+	};
+	
 	// credits
-	var credits = new PIXI.Container();
-	// text
-	// backbutton
+	var credits = {};
+	credits.screen = new PIXI.Container();
+	var button_back_credits = new Button(new PIXI.Text('BACK', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 640, 434, 150, 36)
+	var role_maxgun = new PIXI.Text('Code, Assets, Design', {fontFamily : 'Arial', fontSize: 32, fontWeight : 'bolder', fill : 0xCCCCCC});
+	var maxgun = new PIXI.Text('MaxguN', {fontFamily : 'Arial', fontSize: 30, fontWeight : 'lighter', fill : 0xEEEEEE});
+	var role_lynn = new PIXI.Text('Story, Riddles, Portraits', {fontFamily : 'Arial', fontSize: 32, fontWeight : 'bolder', fill : 0xCCCCCC});
+	var lynn = new PIXI.Text('Gwethelyn', {fontFamily : 'Arial', fontSize: 30, fontWeight : 'lighter', fill : 0xEEEEEE});
+	role_maxgun.position = new PIXI.Point((800 - role_maxgun.width) / 2,90);
+	maxgun.position = new PIXI.Point((800 - maxgun.width)/2,150);
+	role_lynn.position = new PIXI.Point((800 - role_lynn.width)/2,260);
+	lynn.position = new PIXI.Point((800 - lynn.width)/2,320);
+	
+	credits.screen.addChild(role_maxgun);
+	credits.screen.addChild(maxgun);
+	credits.screen.addChild(role_lynn);
+	credits.screen.addChild(lynn);
+	button_back_credits.AddTo(credits.screen);
+
+	credits.listener = function (event) {
+		if (event.button === 0) {
+			if (button_back_credits.collider.contains(mouse.x, mouse.y)) {
+				self.SwitchTo('main');
+			}
+		}
+	};
 
 	this.screens.main = main;
 	this.screens.controls = controls;
@@ -76,12 +125,18 @@ Menu.prototype.ready = function(callback) {
 
 Menu.prototype.SwitchTo = function (screen) {
 	for (var index in this.screens) {
-		this.container.removeChild(this.screens[index]);
-		// unbind event listeners
+		this.container.removeChild(this.screens[index].screen);
+		mouse.off('click', this.screens[index].listener);
 	}
 
-	this.container.addChild(this.screens[screen]);
-	// bind event listeners
+	this.container.addChild(this.screens[screen].screen);
+	mouse.on('click', this.screens[screen].listener);
+}
+
+Menu.prototype.Play = function () {
+	level = new Level('level0', renderer);
+
+	currentScene = level;
 }
 
 Menu.prototype.Tick = function (length) {
