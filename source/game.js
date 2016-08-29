@@ -6,14 +6,17 @@ var renderer = new PIXI.autoDetectRenderer(800, 480);
 renderer.backgroundColor = 0xFFFFFF;
 document.body.appendChild(renderer.view);
 
-var level = new Level('level0', renderer);
+var level = null;//new Level('level0', renderer);
+var menu = new Menu(renderer);
+
+var currentScene = menu;
 
 function tick(length) {
-    level.Tick(length);
+    currentScene.Tick(length);
 }
 
 ticker.add(tick)
 
-level.on('ready', function () {
+currentScene.on('ready', function () {
     ticker.start();
 })
