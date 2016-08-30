@@ -67,6 +67,7 @@ Dialog.prototype.Init = function (data, dialog) {
 		}
 
 		this.textbox.on('end', function () {
+			self.textbox.Lock();
 			self.level.gui.addChild(self.choices);
 			self.Unlock();
 		});
