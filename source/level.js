@@ -320,8 +320,9 @@ Level.prototype.Interact = function () {
 }
 
 Level.prototype.Victory = function () {
+	var self = this;
 	this.submarine.Lock();
-	this.victorySpeech.Display();
+	setTimeout(function () {self.victorySpeech.Display();}, 1000);
 }
 
 Level.prototype.Collides = function(shape) {

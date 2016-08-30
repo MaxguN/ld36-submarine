@@ -1,7 +1,3 @@
-X - redo LD
-	- refine sextant assets
-	- refine assemblage (playtest)
-
 	- hints
 
 	- sfx
@@ -14,6 +10,8 @@ X - redo LD
 	- underwater riddles
 
 	- inner land tileset
+
+	- minimap
 
 O - fog of war
 O - sonar system
