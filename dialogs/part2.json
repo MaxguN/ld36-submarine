@@ -4,9 +4,9 @@
 		"dialog" : {
 			"text" : [
 				["CA", "Well, Commander, have you figured out what this artefact does."],
-				["", "Not yet, but I think... I think I know what it is supposed to be."],
+				["CM", "Not yet, but I think... I think I know what it is supposed to be."],
 				["CA", "Well, that’s a good start. Let’s hear it!"],
-				["", "It looks... like a sextant. "]
+				["CM", "It looks... like a sextant. "]
 			],
 			"characters" : [
 				{
@@ -25,6 +25,12 @@
 					"id" : "AD",
 					"name" : "Admiral Costes",
 					"image" : "admiral.png",
+					"side" : "right"
+				},
+				{
+					"id" : "CM",
+					"name" : "Commander Dalin",
+					"image" : "commander.png",
 					"side" : "right"
 				}
 			]

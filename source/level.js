@@ -31,7 +31,7 @@ function Level(name, renderer) {
 	this.interactable = null;
 	this.end = -1;
 
-	this.riddles = 6;
+	this.riddles = 7;
 	this.locations = [];
 	this.objects = {};
 	for (var tag in Tags) {

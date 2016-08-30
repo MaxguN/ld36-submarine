@@ -4,11 +4,13 @@
 		"dialog" : {
 			"text" : [
 				["CA", "What.... What’s happening?!!"],
-				["", "..."], 
+				["CM", "Checking for an engine malfunction… All general and auxiliary systems are okay. Scanning for… Oh. Captain, we’re not in the Orcan Archipelago anymore."], 
 				["CA", "How is that even…!!"],
+				["CM", "I think we can logically presume that we have been… teleported."], 
+				["CA", "Teleported?! ...The sextant..."],
 				["CO", "Captain! Someone… or something… is trying to hail us. What should we do?"],
 				["CA", "...Go ahead, put them through. This is Captain Tanyo, commanding officer of the Narwhal. We are stranded and mean no harm. State your intentions."],
-				["", "Ἀσπάζομαι, Tριήραρχος."]
+				["UK", "Ἀσπάζομαι, Tριήραρχος."]
 			],
 			"characters" : [
 				{
@@ -27,6 +29,18 @@
 					"id" : "AD",
 					"name" : "Admiral Costes",
 					"image" : "admiral.png",
+					"side" : "right"
+				},
+				{
+					"id" : "CM",
+					"name" : "Commander Dalin",
+					"image" : "commander.png",
+					"side" : "right"
+				},
+				{
+					"id" : "UK",
+					"name" : "???",
+					"image" : "thule.png",
 					"side" : "right"
 				}
 			]

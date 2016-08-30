@@ -3,9 +3,9 @@
 	"dialog1" : {
 		"dialog" : {
 			"text" : [
-				["", "I can’t explain it, Captain. One moment, our sonars pick up a signal, the next moment nothing’s there anymore."],
+				["CM", "I can’t explain it, Captain. One moment, our sonars pick up a signal, the next moment nothing’s there anymore."],
 				["CA", "What’s your hypothesis?"],
-				["", "Well… Either the Roddens are working on a way to scramble our scans, or… Could it be that the artefact is affecting our machines?"],
+				["CM", "Well… Either the Roddens are working on a way to scramble our scans, or… Could it be that the artefact is affecting our machines?"],
 				["CA", "In any case, it won’t do us any good to stay here much longer. Let’s find the last Beacon and hightail it."]
 			],
 			"characters" : [
@@ -25,6 +25,12 @@
 					"id" : "AD",
 					"name" : "Admiral Costes",
 					"image" : "admiral.png",
+					"side" : "right"
+				},
+				{
+					"id" : "CM",
+					"name" : "Commander Dalin",
+					"image" : "commander.png",
 					"side" : "right"
 				}
 			]

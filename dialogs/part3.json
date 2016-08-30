@@ -3,9 +3,9 @@
 	"dialog1" : {
 		"dialog" : {
 			"text" : [
-				["", "Yeah, it definitely is a sextant."],
+				["CM", "Yeah, it definitely is a sextant."],
 				["CA", "I think you’re right. Never seen one out of a history book though. "],
-				["", "Me neither. To think that a long time ago, sailors used them to navigate, using the suns and the stars... "],
+				["CM", "Me neither. To think that a long time ago, sailors used them to navigate, using the suns and the stars... "],
 				["CA", "Not that it would be useful to us now, in a submarine... I do wonder why the Thules decided to make a magical one though."]
 			],
 			"characters" : [
@@ -25,6 +25,12 @@
 					"id" : "AD",
 					"name" : "Admiral Costes",
 					"image" : "admiral.png",
+					"side" : "right"
+				},
+				{
+					"id" : "CM",
+					"name" : "Commander Dalin",
+					"image" : "commander.png",
 					"side" : "right"
 				}
 			]

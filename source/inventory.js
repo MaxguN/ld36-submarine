@@ -135,7 +135,6 @@ Inventory.prototype.Init = function (item) {
 									});
 								} while (attached.length);
 
-								console.log(count.length, self.level.riddles)
 								if (count.length === self.level.riddles) { // Victory!
 									self.container.removeChild(self.rectangle);
 									self.Lock();

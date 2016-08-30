@@ -4,9 +4,9 @@
 		"dialog" : {
 			"text" : [
 				["CA", "All these risks for such a small thing? The Admiralty is even crazier than I thought."],
-				["", "Waw! According to these readings, this “small thing” radiates enough magic to power two ships…"],
+				["CM", "Waw! According to these readings, this “small thing” radiates enough magic to power two ships…"],
 				["CA", "Well, if the Narwhal is ever hungry, we know what to feed it!"],
-				["", "No way you’re putting this anomaly of nature anywhere near my generator Captain!"]
+				["CM", "No way you’re putting this anomaly of nature anywhere near my generator Captain!"]
 			],
 			"characters" : [
 				{
@@ -25,6 +25,12 @@
 					"id" : "AD",
 					"name" : "Admiral Costes",
 					"image" : "admiral.png",
+					"side" : "right"
+				},
+				{
+					"id" : "CM",
+					"name" : "Commander Dalin",
+					"image" : "commander.png",
 					"side" : "right"
 				}
 			]

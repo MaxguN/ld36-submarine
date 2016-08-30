@@ -104,12 +104,10 @@ Submarine.prototype.Collides = function (delta, length) {
 }
 
 Submarine.prototype.Lock = function () {
-	console.log('locked')
 	this.locked = true;
 }
 
 Submarine.prototype.Unlock = function () {
-	console.log('unlocked')
 	this.locked = false;
 }
 

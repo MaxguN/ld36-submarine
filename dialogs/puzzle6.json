@@ -4,7 +4,7 @@
 		"dialog" : {
 			"text" : [
 				["CA", "Well, I’ve never been the best at riddles, but here we go..."],
-				["", "Even though it has sails, it does not move from its hill.\nEven though it has blades, it is useless to go tilting at it.\nEven though it grinds, it has no teeth to eat."]
+				["", "When it is low it is discreet, when it is off it is jarring\nWhen you’re under it you’re captive, when it is yours you are free\nIt is most important, sometimes a secret, always a solution"]
 			],
 			"characters" : [
 				{
@@ -16,9 +16,9 @@
 			]
 		},
 		"choices" : [
-			"The Lighthouse",
-			"The Windmill",
-			"??"
+			"The Language",
+			"The Key",
+			"The Lamp"
 		],
 		"followup" : [
 			{ "dialog" : "answer2", "result" : false },

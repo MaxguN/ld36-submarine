@@ -6,7 +6,8 @@
 				["CO", "Do you think it’s a good idea to assemble it?"],
 				["CA", "Well, of course we could get it back to the Admiralty without even knowing what it does."],
 				["CO", "...You’re gonna get us into trouble again, Captain."],
-				["CA", "Be honest, you enjoy trouble as much as I do!"]
+				["CA", "Be honest, you enjoy trouble as much as I do!"],
+				["", "(To assemble the artefact, open your inventory with the key 'i')"]
 			],
 			"characters" : [
 				{
