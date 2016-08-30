@@ -1,16 +1,8 @@
-X - spawn seamark random
-X - respawn seamarks
-X - improve dialog (speaker)
-X - menu
-X - integrate dialogs
-X - integrate riddles
-X - ending
-	- hints
-X - tutorial
-
-	- redo LD
+X - redo LD
 	- refine sextant assets
 	- refine assemblage (playtest)
+
+	- hints
 
 	- sfx
 	- music
