@@ -77,7 +77,8 @@ Animator.prototype.Init = function (data) {
 			}, this);
 
 			this.animations[state][animation] = new PIXI.extras.MovieClip(textureSet);
-			this.animations[state][animation].animationSpeed = 0.15;
+			this.animations[state][animation].animationSpeed = data.animations[animation].speed / 100;
+			this.animations[state][animation].loop = data.animations[animation].loop;
 			this.animations[state][animation].pivot = new PIXI.Point(this.animations[state][animation].width / 2, this.animations[state][animation].height / 2);
 		}
 	}
@@ -94,12 +95,12 @@ Animator.prototype.Init = function (data) {
 	this.loaded();
 }
 
-Animator.prototype.on = function (eventType, callback) {
+Animator.prototype.on = function (eventType, callback, self) {
 	if (!this.listeners[eventType]) {
 		this.listeners[eventType] = [];
 	}
 
-	this.listeners[eventType].push(callback);
+	this.listeners[eventType].push({func : callback, object : self});
 }
 
 Animator.prototype.loaded = function () {
@@ -107,7 +108,7 @@ Animator.prototype.loaded = function () {
 
 	if (this.listeners['load']) {
 		this.listeners['load'].forEach(function (callback) {
-			callback();
+			callback.func.call(callback.object);
 		}, this);
 	}
 }
@@ -173,6 +174,8 @@ Animator.prototype.UpdateAnim = function (animation, mirror) {
 Animator.prototype.SwitchToAnim = function (animation, mirror) {
 	mirror = !(!mirror);
 
+	// console.log('Switch to ', animation)
+
 	this.UpdateAnim(animation, mirror);
 }
 
@@ -199,5 +202,17 @@ Animator.prototype.MirrorAnim = function (mirror) {
 Animator.prototype.Erase = function () {
 	if (this.currentAnimation) {
 		this.container.removeChild(this.currentAnimation);		
+	}
+}
+
+Animator.prototype.Tick = function () {
+	if (this.listeners.endAnimation && this.listeners.endAnimation.length) {
+		if (!this.currentAnimation.playing) {
+			this.listeners.endAnimation.forEach(function (callback) {
+				callback.func.call(callback.object);
+			});
+
+			delete this.listeners.endAnimation;
+		}
 	}
 }

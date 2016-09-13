@@ -15,8 +15,8 @@ function SeaMark(x, y, level, number, location) {
 	load.json('animations/attention.json', function (data) {self.notification.Init(data);});
 
 	this.notification.on('load', function () {
-		self.notification.Hide();
-	});
+		this.notification.Hide();
+	}, this);
 }
 
 SeaMark.prototype = Object.create(Animator.prototype);

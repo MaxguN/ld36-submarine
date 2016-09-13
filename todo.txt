@@ -1,3 +1,10 @@
+	- timer underwater
+	- underwater riddles
+	- combat system
+	- sight area (ennemies)
+
+	- post-mortem
+
 	- hints
 
 	- sfx
@@ -5,13 +12,10 @@
 
 	- fix collisions
 
-	- timer underwater
-	- combat system
-	- underwater riddles
-
 	- inner land tileset
 
 	- minimap
 
 O - fog of war
+O - increase FoW underwater
 O - sonar system

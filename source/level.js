@@ -28,6 +28,7 @@ function Level(name, renderer) {
 
 	this.origin = {x:0,y:0};
 	this.submarine = {};
+	this.interface = {};
 	this.interactable = null;
 	this.end = -1;
 
@@ -224,6 +225,8 @@ Level.prototype.Init = function(level) {
 	while (this.next.ready.length > 0) {
 		(this.next.ready.shift())();
 	}
+
+	this.interface = new GUI(this);
 
 	this.victorySpeech = new Dialog(this, 'victory');
 	this.victorySpeech.on('end', function () {
@@ -426,6 +429,8 @@ Level.prototype.Tick = function(length) {
 				object.Tick(deltaTime);
 			}, this);
 		}
+
+		this.interface.Tick(deltaTime);
 
 		this.Draw();
 	}

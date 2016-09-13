@@ -3,7 +3,7 @@
 	"animations" : {
 		"idle" : {
 			"frames" : [
-				{"tile" : 4}
+				{"tile" : 0}
 			],
 			"speed" : 20,
 			"loop" : true,
@@ -11,8 +11,8 @@
 		},
 		"move" : {
 			"frames" : [
-				{"tile" : 0},
-				{"tile" : 1}
+				{"tile" : 1},
+				{"tile" : 2}
 			],
 			"speed" : 20,
 			"loop" : true,
@@ -20,7 +20,7 @@
 		},
 		"idle-underwater" : {
 			"frames" : [
-				{"tile" : 5}
+				{"tile" : 3}
 			],
 			"speed" : 20,
 			"loop" : true,
@@ -28,11 +28,31 @@
 		},
 		"move-underwater" : {
 			"frames" : [
-				{"tile" : 2},
-				{"tile" : 3}
+				{"tile" : 4},
+				{"tile" : 5}
 			],
 			"speed" : 20,
 			"loop" : true,
+			"loopto" : 0
+		},
+		"surface" : {
+			"frames" : [
+				{"tile" : 3},
+				{"tile" : 7},
+				{"tile" : 6}
+			],
+			"speed" : 5,
+			"loop" : false,
+			"loopto" : 0
+		},
+		"dive" : {
+			"frames" : [
+				{"tile" : 0},
+				{"tile" : 6},
+				{"tile" : 7}
+			],
+			"speed" : 5,
+			"loop" : false,
 			"loopto" : 0
 		}
 	},
@@ -41,7 +61,7 @@
 			"file" : "submarine.png",
 			"tilewidth" : 32,
 			"tileheight" : 32,
-			"imagewidth" : 192,
+			"imagewidth" : 256,
 			"imageheight" : 32,
 			"firstgid" : 0
 		}

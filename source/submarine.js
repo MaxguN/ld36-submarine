@@ -8,6 +8,13 @@ function Submarine(x, y, level) {
 
 	this.rotation = 0;
 	this.speed = 256; // pixels/second
+	this.speed_surface = this.speed * 0.75; // pixels/second
+	this.speed_underwater = this.speed * 1.25; // pixels/second
+	this.currentSpeed = this.speed_surface;
+
+	this.diving = false;
+	this.underwater = false;
+	this.surfacing = false;
 
 	this.dialogs = [];
 
@@ -16,8 +23,8 @@ function Submarine(x, y, level) {
 	this.level = level;
 
 	this.on('load', function () {
-		self.level.CenterCamera(self.GetCenter());
-	})
+		this.level.CenterCamera(self.GetCenter());
+	}, this)
 
 	load.json('animations/submarine.json', function (data) {self.Init(data);});
 	this.InitDialogs();
@@ -144,6 +151,7 @@ Submarine.prototype.Failure = function (seamark) {
 
 Submarine.prototype.Tick = function (length) {
 	if (this.isLoaded) {
+		Animator.prototype.Tick.call(this, length);
 		if (!this.locked) {
 			var delta = GetDirection();
 			
@@ -151,29 +159,59 @@ Submarine.prototype.Tick = function (length) {
 				this.rotation = Math.PI / 2 - Math.acos(delta.x) * (delta.y ? -Math.sign(delta.y) : 1);
 			}
 
-			this.currentAnimation.rotation = this.rotation;
+			if (keydown[keys.shift]) {
+				if (!this.diving && !this.surfacing) {
+					if (this.underwater) {
+						this.SwitchToAnim('surface');
+						this.surfacing = true;
+						this.on('endAnimation', function () {
+							this.SwitchToAnim('idle');
+							this.surfacing = false;
+							this.underwater = false;
+							this.currentSpeed = this.speed_surface;
+						}, this);
+					} else {
+						this.SwitchToAnim('dive');
+						this.diving = true;
+						this.on('endAnimation', function () {
+							this.SwitchToAnim('idle-underwater');
+							this.diving = false;
+							this.underwater = true;
+							this.currentSpeed = this.speed_underwater;
+						}, this);
+					}
 
-			delta.x *= this.speed * length;
-			delta.y *= this.speed * length;
+					keydown[keys.shift] = false;
+				}
+			}
+
+			delta.x *= this.currentSpeed * length;
+			delta.y *= this.currentSpeed * length;
 
 			delta = this.Collides(delta, length);
 
 			if (delta.x || delta.y) {
-				if (keydown[keys.shift]) {
-					this.SwitchToAnim('move-underwater');
-				} else {
-					this.SwitchToAnim('move');
+				if (!this.diving && !this.surfacing) {
+					if (this.underwater) {
+						this.SwitchToAnim('move-underwater');
+					} else {
+						this.SwitchToAnim('move');
+					}
 				}
 			} else {
-				if (keydown[keys.shift]) {
-					this.SwitchToAnim('idle-underwater');
-				} else {
-					this.SwitchToAnim('idle');
+				if (!this.diving && !this.surfacing) {
+					if (this.underwater) {
+						this.SwitchToAnim('idle-underwater');
+					} else {
+						this.SwitchToAnim('idle');
+					}
 				}
 			}
 
 			this.x += delta.x;
 			this.y += delta.y;
+
+			this.currentAnimation.rotation = this.rotation;
 
 			this.currentAnimation.position.x = this.x;
 			this.currentAnimation.position.y = this.y;
