@@ -317,6 +317,7 @@ Level.prototype.Interact = function () {
 		},
 		function () {
 			self.submarine.off('forceSurface', self.interactable.Timeout);
+			self.submarine.surface();
 		});
 
 		this.submarine.on('forceSurface', this.interactable.Timeout, this.interactable);

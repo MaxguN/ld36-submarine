@@ -33,11 +33,9 @@ function Submarine(x, y, level) {
 	}, this)
 
 	this.on('forceSurface', function () {
-		console.log('surfacing !')
 		this.SwitchToAnim('surface');
 		this.surfacing = true;
 		this.on('endAnimation', function () {
-			console.log('surfaced !')
 			this.SwitchToAnim('idle');
 			this.surfacing = false;
 			this.underwater = false;
@@ -309,7 +307,9 @@ Submarine.prototype.Tick = function (length) {
 			}
 		} else {
 			if (this.underwater) {
-				this.SwitchToAnim('idle-underwater');
+				if (!this.diving && !this.surfacing) {
+					this.SwitchToAnim('idle-underwater');
+				}
 
 				if (this.air > 0) {
 					this.air -= length;

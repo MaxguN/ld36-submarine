@@ -226,14 +226,14 @@ Animator.prototype.Erase = function () {
 Animator.prototype.Tick = function () {
 	if (this.listeners.endAnimation && this.listeners.endAnimation.length) {
 		if (!this.currentAnimation.playing) {
-			console.log('not playing')
+			// console.log('not playing')
 			this.listeners.endAnimation.forEach(function (callback) {
 				callback.func.call(callback.object);
 			});
 
 			delete this.listeners.endAnimation;
 		} else {
-			console.log('playing')
+			// console.log('playing')
 		}
 	}
 }
