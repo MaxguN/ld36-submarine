@@ -16,6 +16,12 @@ function Submarine(x, y, level) {
 	this.underwater = false;
 	this.surfacing = false;
 
+	this.energyCapacity = 60;
+	this.airCapacity = 5;
+
+	this.energy = this.energyCapacity;
+	this.air = this.airCapacity;
+
 	this.dialogs = [];
 
 	this.inventory = new Inventory('sextant', level);
@@ -25,6 +31,19 @@ function Submarine(x, y, level) {
 	this.on('load', function () {
 		this.level.CenterCamera(self.GetCenter());
 	}, this)
+
+	this.on('forceSurface', function () {
+		console.log('surfacing !')
+		this.SwitchToAnim('surface');
+		this.surfacing = true;
+		this.on('endAnimation', function () {
+			console.log('surfaced !')
+			this.SwitchToAnim('idle');
+			this.surfacing = false;
+			this.underwater = false;
+			this.currentSpeed = this.speed_surface;
+		}, this);
+	}, this);
 
 	load.json('animations/submarine.json', function (data) {self.Init(data);});
 	this.InitDialogs();
@@ -41,6 +60,14 @@ Submarine.prototype.InitDialogs = function () {
 		this.dialogs[i].on('end', function () {
 			self.Unlock();
 		});
+	}
+}
+
+Submarine.prototype.surface = function () {
+	if (this.listeners['forceSurface']) {
+		this.listeners['forceSurface'].forEach(function (callback) {
+			callback.func.call(callback.object);
+		}, this);
 	}
 }
 
@@ -110,17 +137,30 @@ Submarine.prototype.Collides = function (delta, length) {
 	return delta;
 }
 
-Submarine.prototype.Lock = function () {
+Submarine.prototype.Lock = function (dive) {
 	this.locked = true;
+
+	if (dive) {
+		if (!this.underwater) {
+			this.SwitchToAnim('dive');
+			this.diving = true;
+			this.on('endAnimation', function () {
+				this.SwitchToAnim('idle-underwater');
+				this.diving = false;
+				this.underwater = true;
+				this.currentSpeed = this.speed_underwater;
+			}, this);
+		}
+	}
 }
 
-Submarine.prototype.Unlock = function () {
+Submarine.prototype.Unlock = function (surface) {
 	this.locked = false;
 }
 
 Submarine.prototype.Interact = function () {
 	if (this.level.Interact()) {
-		this.Lock();
+		this.Lock(true);
 	}
 }
 
@@ -194,16 +234,54 @@ Submarine.prototype.Tick = function (length) {
 				if (!this.diving && !this.surfacing) {
 					if (this.underwater) {
 						this.SwitchToAnim('move-underwater');
+
+						this.energy -= length;
+						this.air += length;
+
+						if (this.air > this.airCapacity) {
+							this.air = this.airCapacity;
+						}
+
+						if (this.energy <= 0) {
+							this.energy = 0;
+							this.surface();
+						}
 					} else {
 						this.SwitchToAnim('move');
+
+						this.energy += length * 2;
+						this.air += length * 16;
+
+						if (this.energy > this.energyCapacity) {
+							this.energy = this.energyCapacity;
+						}
+						if (this.air > this.airCapacity) {
+							this.air = this.airCapacity;
+						}
 					}
 				}
 			} else {
 				if (!this.diving && !this.surfacing) {
 					if (this.underwater) {
 						this.SwitchToAnim('idle-underwater');
+
+						this.air -= length;
+						if (this.air <= 0) {
+							this.air = 0;
+							this.surface();
+						}
 					} else {
 						this.SwitchToAnim('idle');
+
+						this.energy += length * 4;
+						this.air += length * 16;
+
+						if (this.energy > this.energyCapacity) {
+							this.energy = this.energyCapacity;
+						}
+						if (this.air > this.airCapacity) {
+							this.air = this.airCapacity;
+						}
 					}
 				}
 			}
@@ -230,6 +308,18 @@ Submarine.prototype.Tick = function (length) {
 				keydown[keys.i] = false;
 			}
 		} else {
+			if (this.underwater) {
+				this.SwitchToAnim('idle-underwater');
+
+				if (this.air > 0) {
+					this.air -= length;
+					if (this.air <= 0) {
+						this.air = 0;
+						this.surface();
+					}
+				}
+			}
+
 			if (keydown[keys.i] && this.inventory.IsOpened()) {
 				this.Inventory();
 				keydown[keys.i] = false;

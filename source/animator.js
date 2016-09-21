@@ -103,6 +103,24 @@ Animator.prototype.on = function (eventType, callback, self) {
 	this.listeners[eventType].push({func : callback, object : self});
 }
 
+Animator.prototype.off = function(eventType, callback) {
+	var indexes = [];
+
+	if (!this.listeners[eventType]) {
+		this.listeners[eventType] = [];
+	}
+
+	this.listeners[eventType].forEach(function (listener, index) {
+		if (listener.func === callback) {
+			indexes.unshift(index);
+		}
+	}, this);
+
+	indexes.forEach(function (index) {
+		this.listeners[eventType].splice(index, 1);
+	}, this);
+}
+
 Animator.prototype.loaded = function () {
 	this.isLoaded = true;
 
@@ -208,11 +226,14 @@ Animator.prototype.Erase = function () {
 Animator.prototype.Tick = function () {
 	if (this.listeners.endAnimation && this.listeners.endAnimation.length) {
 		if (!this.currentAnimation.playing) {
+			console.log('not playing')
 			this.listeners.endAnimation.forEach(function (callback) {
 				callback.func.call(callback.object);
 			});
 
 			delete this.listeners.endAnimation;
+		} else {
+			console.log('playing')
 		}
 	}
 }

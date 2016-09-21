@@ -307,14 +307,19 @@ Level.prototype.Interact = function () {
 
 	if (this.interactable) {
 		this.interactable.LaunchDialog(function (success) {
-			self.submarine.Unlock();
+			self.submarine.Unlock(true);
 			
 			if (success) {
 				self.submarine.Success(self.interactable);
 			} else {
 				self.submarine.Failure(self.interactable);
 			}
+		},
+		function () {
+			self.submarine.off('forceSurface', self.interactable.Timeout);
 		});
+
+		this.submarine.on('forceSurface', this.interactable.Timeout, this.interactable);
 
 		return true;
 	} else {

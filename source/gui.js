@@ -2,9 +2,9 @@ function GUI(level) {
 	this.level = level;
 
 	this.energyGauge = new PIXI.Graphics();
-	this.energyValue = new PIXI.Text("1:00");
+	this.energyValue = new PIXI.Text("0:00");
 	this.airGauge = new PIXI.Graphics();
-	this.airValue = new PIXI.Text("0:30");
+	this.airValue = new PIXI.Text("0:00");
 
 	this.container = new PIXI.Container();
 
@@ -73,11 +73,11 @@ GUI.prototype.Display = function () {
 }
 
 GUI.prototype.Tick = function (length) {
-	var energy = 1;
-	var air = 1;
+	var energy = this.level.submarine.energy / this.level.submarine.energyCapacity;
+	var air = this.level.submarine.air / this.level.submarine.airCapacity;
 
-	var energyTime = Math.ceil(energy * 60);
-	var airTime = Math.ceil(air * 30);
+	var energyTime = Math.ceil(energy * this.level.submarine.energyCapacity);
+	var airTime = Math.ceil(air * this.level.submarine.airCapacity);
 
 	this.energyGauge.clear();
 	this.energyGauge.beginFill(0xcccc00, 1);

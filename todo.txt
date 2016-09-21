@@ -1,5 +1,6 @@
-	- timer underwater
-	- underwater riddles
+X - timer underwater
+/ - underwater riddles
+	- cooldown dive (30s or energy @ 50% min)
 	- combat system
 	- sight area (ennemies)
 

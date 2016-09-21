@@ -5,11 +5,12 @@ function SeaMark(x, y, level, number, location) {
 	var self = this;
 
 	this.number = number;
+	this.file = 'puzzle' + number;
 	this.location = location;
 	this.locked = false;
 	this.level = level;
 	this.notification = new Animator(x + 16, y + 16 - level.tile.height / 2, level.map);
-	this.dialog = new Dialog(level, 'puzzle' + number);
+	this.dialog = new Dialog(level, this.file);
 
 	load.json('animations/seamark.json', function (data) {self.Init(data);});
 	load.json('animations/attention.json', function (data) {self.notification.Init(data);});
@@ -34,14 +35,26 @@ SeaMark.prototype.SetInteractable = function (enable) {
 	}
 }
 
-SeaMark.prototype.LaunchDialog = function (callback) {
-	this.dialog.on('end', callback);
+SeaMark.prototype.LaunchDialog = function (endCallback, answerCallback) {
+	this.dialog.on('end', endCallback);
+	this.dialog.on('answer', answerCallback);
 	this.dialog.Display();
 }
 
 SeaMark.prototype.Lock = function () {
 	this.SetInteractable(false);
 	this.locked = true;
+}
+
+SeaMark.prototype.Timeout = function () {
+	var self = this;
+	var timeout = new Dialog(this.level, this.file, "timeout");
+	timeout.on('end', function () {
+		self.dialog.end(false);
+	});
+	this.dialog.Hide();
+	this.dialog.answered();
+	timeout.Display();
 }
 
 SeaMark.prototype.Move = function (x, y) {

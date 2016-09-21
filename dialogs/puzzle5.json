@@ -55,5 +55,21 @@
 				}
 			]
 		}
+	},
+	"timeout" : {
+		"dialog" : {
+			"text" : [
+				["CA", "Urgh, we got no more air. Lets surface!"],
+				["CA", "What… Argh, the Beacon teleported! No matter, we’ll look for it and get it right next time. Commander, punch it!"]
+			],
+			"characters" : [
+				{
+					"id" : "CA",
+					"name" : "Captain Tanyo",
+					"image" : "captain.png",
+					"side" : "left"
+				}
+			]
+		}
 	}
 }

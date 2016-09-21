@@ -13,7 +13,8 @@ function Dialog(level, file, dialog) {
 	this.listener = function () {};
 
 	this.listeners = {
-		end : []
+		end : [],
+		answer : []
 	}
 
 	load.json('dialogs/' + file + '.json', function (data) {self.Init(data, dialog);});
@@ -58,6 +59,7 @@ Dialog.prototype.Init = function (data, dialog) {
 							self.end(data[dialog].followup[index].result);
 						})
 						self.Hide();
+						self.answered();
 						followup.Display();
 
 						return true;
@@ -98,6 +100,16 @@ Dialog.prototype.end = function (success) {
 	}
 	
 	this.Hide();
+}
+
+Dialog.prototype.answered = function () {
+	if (this.listeners.answer.length) {
+		this.listeners.answer.forEach(function (callback) {
+			callback();
+		});
+
+		this.listeners.answer = [];
+	}
 }
 
 Dialog.prototype.Hide = function () {
