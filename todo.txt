@@ -1,21 +1,20 @@
-X - timer underwater
-X - underwater riddles
-	- cooldown dive (30s or energy @ 50% min)
+X - sight area (ennemies)
 	- combat system
-	- sight area (ennemies)
 
 	- post-mortem
 
-	- hints
+	- fix collisions
+	- fix item grab inventory
+	- minimap
+
+	- inner land tileset
 
 	- sfx
 	- music
 
-	- fix collisions
+	- hints
 
-	- inner land tileset
-
-	- minimap
+	- cooldown dive (30s or energy @ 50% min)
 
 O - fog of war
 O - increase FoW underwater

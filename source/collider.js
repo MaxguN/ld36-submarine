@@ -4,10 +4,17 @@ function Collider(tag, whitelist, shape) {
 	this.colliderShape = shape;
 }
 
+function Trigger(tag, whitelist, shape) {
+	this.triggerTag = tag;
+	this.triggerWhitelist = whitelist;
+	this.triggerShape = shape;
+}
+
 var Tags = {
 	Player : 'player',
 	PlayerBullet : 'player bullet',
 	Ennemy : 'ennemy',
 	EnnemyBullet : 'ennemy bullet',
-	Seamark : 'seamark'
+	Seamark : 'seamark',
+	SightArea : 'sight area'
 }

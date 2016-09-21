@@ -138,7 +138,7 @@ Menu.prototype.SwitchTo = function (screen) {
 }
 
 Menu.prototype.Play = function () {
-	level = new Level('level1', renderer);
+	level = new Level('level0', renderer);
 
 	currentScene = level;
 }
