@@ -13,6 +13,7 @@ function Level(name, renderer) {
 	this.tiles = {};
 	this.tilesets = [];
 	this.layers = [];
+	this.terrain = [];
 	this.colliders = {
 		top : [],
 		left : [],
@@ -132,52 +133,58 @@ Level.prototype.Init = function(level) {
 					tile.position = new PIXI.Point(x, y);
 					this.map.addChild(tile);
 
+					var rectangle = new PIXI.Rectangle(x, y, this.tile.width, this.tile.height);
+
+					if (tileid >= islandid && tileid <= islandid + 12) {
+						this.terrain.push(rectangle);
+					}
+
 					switch (tileid) {
 						case islandid : // top left
-							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
-							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.top.push(rectangle);
+							this.colliders.left.push(rectangle);
 							break;
 						case islandid + 1 : // top
-							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.top.push(rectangle);
 							break;
 						case islandid + 2 : // top right
-							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
-							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.top.push(rectangle);
+							this.colliders.right.push(rectangle);
 							break;
 						case islandid + 3 : // bottom right
-							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
-							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.bottom.push(rectangle);
+							this.colliders.right.push(rectangle);
 							break;
 						case islandid + 4 : // bottom left
-							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
-							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.bottom.push(rectangle);
+							this.colliders.left.push(rectangle);
 							break;
 						case islandid + 5 : // left
-							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.left.push(rectangle);
 							break;
 						case islandid + 6 : // none
 							break;
 						case islandid + 7 : // right
-							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.right.push(rectangle);
 							break;
 						case islandid + 8 : // top right
-							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
-							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.top.push(rectangle);
+							this.colliders.right.push(rectangle);
 							break;
 						case islandid + 9 : // top left
-							this.colliders.top.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
-							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.top.push(rectangle);
+							this.colliders.left.push(rectangle);
 							break;
 						case islandid + 10 : // bottom left
-							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
-							this.colliders.left.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.bottom.push(rectangle);
+							this.colliders.left.push(rectangle);
 							break;
 						case islandid + 11 : // bottom
-							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.bottom.push(rectangle);
 							break;
 						case islandid + 12 : // bottom right
-							this.colliders.bottom.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
-							this.colliders.right.push(new PIXI.Rectangle(x, y, this.tile.width, this.tile.height));
+							this.colliders.bottom.push(rectangle);
+							this.colliders.right.push(rectangle);
 							break;
 					}
 				}

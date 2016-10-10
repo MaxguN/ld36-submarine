@@ -1,13 +1,18 @@
-X - sight area (ennemies)
 	- combat system
+X - boat torpedos
+X - boat shooting
+	- submarine life
+	- collisions
+	
+	- minimap
+	- use sonar or similar stuff to detect beacons but can be detected + choose strength of radar
 
 	- post-mortem
 
 	- fix collisions
 	- fix item grab inventory
-	- minimap
 
-	- inner land tileset
+	- trees
 
 	- sfx
 	- music
@@ -17,5 +22,3 @@ X - sight area (ennemies)
 	- cooldown dive (30s or energy @ 50% min)
 
 O - fog of war
-O - increase FoW underwater
-O - sonar system
