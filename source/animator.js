@@ -96,6 +96,7 @@ Animator.prototype.Init = function (data) {
 }
 
 Animator.prototype.on = function (eventType, callback, self) {
+	// console.log(eventType, callback, self)
 	if (!this.listeners[eventType]) {
 		this.listeners[eventType] = [];
 	}

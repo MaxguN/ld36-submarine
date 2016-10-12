@@ -53,6 +53,7 @@ function Level(name, renderer) {
 	};
 
 	this.victorySpeech = {};
+	this.defeatDialog = {};
 	this.ending = false;
 	this.over = false;
 
@@ -240,6 +241,15 @@ Level.prototype.Init = function(level) {
 		currentScene = menu;
 		menu.SwitchTo('credits');
 	});
+	this.defeatDialog = new Dialog(this, 'defeat');
+	this.defeatDialog.on('end', function (retry) {
+		if (retry) {
+			setTimeout(function () { menu.Play(); }, 200);
+		} else {
+			currentScene = menu;
+			menu.SwitchTo('credits');
+		}
+	});
 	var intro = new Dialog(this, 'introduction');
 	intro.on('end', function () {
 		self.submarine.Unlock();
@@ -341,6 +351,10 @@ Level.prototype.Victory = function () {
 	setTimeout(function () {self.victorySpeech.Display();}, 1000);
 }
 
+Level.prototype.Defeat = function () {
+	this.defeatDialog.Display();
+}
+
 Level.prototype.Collides = function(shape) {
 	function intersectRectangles(rectangle1, rectangle2) {
 		var r1 = {
@@ -362,17 +376,27 @@ Level.prototype.Collides = function(shape) {
 				r2.bottom < r1.top);
 	}
 
+	function intersectSegmentCircle(a, b, c) {
+		var ac = Math.sqrt(Math.pow(a.x - c.x, 2) + Math.pow(a.y - c.y, 2));
+		var ab = Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+
+		return c.radius >= Math.sqrt(Math.pow(ac, 2) - Math.pow(ab / 2, 2));
+	}
+
 	function intersectRectangleCircle(rectangle, circle) {
 		var r = {
-			left : rectangle1.x,
-			right : rectangle1.x + rectangle1.width,
-			top : rectangle1.y,
-			bottom : rectangle1.y + rectangle1.height
+			left : rectangle.x,
+			right : rectangle.x + rectangle.width,
+			top : rectangle.y,
+			bottom : rectangle.y + rectangle.height
 		};
 		
 
 		return (rectangle.contains(circle.x, circle.y) ||
-				false);
+				intersectSegmentCircle(new PIXI.Point(r.left, r.top), new PIXI.Point(r.left, r.bottom), circle) ||
+				intersectSegmentCircle(new PIXI.Point(r.left, r.bottom), new PIXI.Point(r.right, r.bottom), circle) ||
+				intersectSegmentCircle(new PIXI.Point(r.right, r.bottom), new PIXI.Point(r.right, r.top), circle) ||
+				intersectSegmentCircle(new PIXI.Point(r.right, r.top), new PIXI.Point(r.left, r.top), circle));
 	}
 
 	var collides = false;

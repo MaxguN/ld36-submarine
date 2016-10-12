@@ -15,10 +15,12 @@ function Submarine(x, y, level) {
 	this.diving = false;
 	this.underwater = false;
 	this.surfacing = false;
+	this.exploding = false;
 
 	this.energyCapacity = 60;
 	this.airCapacity = 5;
 
+	this.lives = 3;
 	this.energy = this.energyCapacity;
 	this.air = this.airCapacity;
 
@@ -79,7 +81,7 @@ Submarine.prototype.Collides = function (delta, length) {
 	var width = rectangle.width;
 	var height = rectangle.height;
 
-	collisions = this.level.Collides(this.GetRectangle());
+	collisions = this.level.Collides(rectangle);
 
 	if (collisions.collides) {
 		for (var way in collisions.colliders) {
@@ -133,6 +135,27 @@ Submarine.prototype.Collides = function (delta, length) {
 	}
 
 	return delta;
+}
+
+Submarine.prototype.Hit = function () {
+	this.lives -= 1;
+
+	if (this.lives === 0) {
+		this.Kill();
+	}
+}
+
+Submarine.prototype.Kill = function () {
+	this.exploding = true;
+	this.diving = false;
+	this.surfacing = false;
+	this.underwater = false;
+	this.SwitchToAnim('explode');
+	this.on('endAnimation', function () {
+		this.Hide();
+		this.level.Defeat();
+		this.level.RemoveObject(this);
+	}, this);
 }
 
 Submarine.prototype.Lock = function (dive) {
@@ -190,7 +213,7 @@ Submarine.prototype.Failure = function (seamark) {
 Submarine.prototype.Tick = function (length) {
 	if (this.isLoaded) {
 		Animator.prototype.Tick.call(this, length);
-		if (!this.locked) {
+		if (!this.locked && !this.exploding) {
 			var delta = GetDirection();
 			
 			if (IsMoving()) {

@@ -14,6 +14,9 @@ function Boat(x, y, level, rotation) {
 
 	this.shotCount = 0;
 	this.shotThreshold = 2;
+	
+	this.lives = 1;
+	this.exploding = false;
 
 	this.target = null;
 	this.tailing = 0;
@@ -180,7 +183,7 @@ Boat.prototype.Collides = function (delta, length) {
 	var colliders = this.level.GetColliders(this.triggerWhitelist);
 
 	if (!colliders.some(function (collider) {
-		if (!collider.underwater && intersectCircles(collider.colliderShape, this.triggerShape)) {
+		if (!collider.underwater && !collider.exploding && intersectCircles(collider.colliderShape, this.triggerShape)) {
 			this.target = collider;
 
 			return true;
@@ -207,13 +210,32 @@ Boat.prototype.Shoot = function (length) {
 		
 		var rotation = Math.PI / 2 - Math.acos(x) * (y ? -Math.sign(y) : 1);
 
-		this.level.AddObject(new Torpedo(this.x, this.y, this.level, rotation));
+		this.level.AddObject(new Torpedo(this.x, this.y, this.level, rotation, this));
 		this.timerShoot = this.delayShoot;
 	}
 }
 
+Boat.prototype.Hit = function () {
+	this.lives -= 1;
+
+	if (this.lives <= 0) {
+		this.Kill();
+	}
+}
+
+Boat.prototype.Kill = function () {
+	this.exploding = true;
+	this.SwitchToAnim('explode');
+	this.on('endAnimation', function () {
+		this.Hide();
+		this.level.RemoveObject(this);
+		this.container.removeChild(this.sightArea);
+	}, this);
+}
+
 Boat.prototype.Tick = function (length) {
-	if (this.isLoaded) {
+	if (this.isLoaded && !this.exploding) {
+
 		var target = null;
 		var delta = {
 			x : 0,
@@ -354,4 +376,6 @@ Boat.prototype.Tick = function (length) {
 
 		this.triggerShape.radius = 200 * (this.pursuit ? 2 : 1);
 	}
+
+	Animator.prototype.Tick.call(this, length);
 }

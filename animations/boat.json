@@ -17,6 +17,16 @@
 			"speed" : 20,
 			"loop" : true,
 			"loopto" : 0
+		},
+		"explode" : {
+			"frames" : [
+				{"tile" : 0},
+				{"tile" : 1},
+				{"tile" : 2}
+			],
+			"speed" : 5,
+			"loop" : false,
+			"loopto" : 0
 		}
 	},
 	"tilesets" : [

@@ -1,9 +1,7 @@
-	- combat system
-X - boat torpedos
-X - boat shooting
-	- submarine life
-	- collisions
-	
+X - combat system
+X - submarine life
+X - collisions
+
 	- minimap
 	- use sonar or similar stuff to detect beacons but can be detected + choose strength of radar
 

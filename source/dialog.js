@@ -54,13 +54,19 @@ Dialog.prototype.Init = function (data, dialog) {
 			if (event.button === 0) {
 				rectangles.some(function (rectangle, index) {
 					if (rectangle.contains(event.layerX, event.layerY)) {
-						var followup = new Dialog(self.level, self.file, data[dialog].followup[index].dialog);
-						followup.on('end', function () {
+						if (data[dialog].followup[index].dialog) {
+							var followup = new Dialog(self.level, self.file, data[dialog].followup[index].dialog);
+							followup.on('end', function () {
+								self.end(data[dialog].followup[index].result);
+							})
+							self.Hide();
+							self.answered();
+							followup.Display();
+						} else {
+							self.Hide();
+							self.answered();
 							self.end(data[dialog].followup[index].result);
-						})
-						self.Hide();
-						self.answered();
-						followup.Display();
+						}
 
 						return true;
 					}

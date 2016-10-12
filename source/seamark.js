@@ -72,6 +72,8 @@ SeaMark.prototype.Move = function (x, y) {
 	this.notification.currentAnimation.y = this.notification.y;
 }
 
+SeaMark.prototype.Hit = function () {}
+
 SeaMark.prototype.Collides = function () {
 	function intersectCircles(circle1, circle2) {
 		return Math.sqrt(Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2)) < circle1.radius + circle2.radius;
