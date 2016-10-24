@@ -1,10 +1,3 @@
-X - combat system
-X - submarine life
-X - collisions
-
-	- minimap
-	- use sonar or similar stuff to detect beacons but can be detected + choose strength of radar
-
 	- post-mortem
 
 	- fix collisions
@@ -15,8 +8,8 @@ X - collisions
 	- sfx
 	- music
 
-	- hints
+O - hints
 
-	- cooldown dive (30s or energy @ 50% min)
+O - cooldown dive (30s or energy @ 50% min)
 
 O - fog of war

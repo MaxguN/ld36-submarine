@@ -1,6 +1,7 @@
 function SeaMark(x, y, level, number, location) {
 	Animator.call(this, x + 16, y + 16, level.map);
 	Collider.call(this, Tags.Seamark, [Tags.Player], new PIXI.Circle(x, y, 64));
+	Trigger.call(this, Tags.Seamark, [Tags.Radar], new PIXI.Circle(x, y, 16));
 
 	var self = this;
 
@@ -8,6 +9,7 @@ function SeaMark(x, y, level, number, location) {
 	this.file = 'puzzle' + number;
 	this.location = location;
 	this.locked = false;
+	this.notify = false;
 	this.level = level;
 	this.notification = new Animator(x + 16, y + 16 - level.tile.height / 2, level.map);
 	this.dialog = new Dialog(level, this.file);
@@ -44,6 +46,7 @@ SeaMark.prototype.LaunchDialog = function (endCallback, answerCallback) {
 SeaMark.prototype.Lock = function () {
 	this.SetInteractable(false);
 	this.locked = true;
+	this.notify = false;
 }
 
 SeaMark.prototype.Timeout = function () {
@@ -91,8 +94,26 @@ SeaMark.prototype.Collides = function () {
 	}
 }
 
+SeaMark.prototype.Triggers = function () {
+	function intersectCircles(circle1, circle2) {
+		return circle1.radius && circle2.radius && (Math.sqrt(Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2)) < circle1.radius + circle2.radius);
+	}
+
+	var colliders = this.level.GetColliders(this.triggerWhitelist);
+
+	if (!colliders.some(function (collider) {
+		if (!this.locked && intersectCircles(collider.triggerShape, this.triggerShape)) {
+			this.notify = true;
+			return true;
+		}
+	}, this)) {
+		this.notify = false;
+	}
+}
+
 SeaMark.prototype.Tick = function (length) {
 	if (this.isLoaded && !this.locked) {
-		this.Collides()
+		this.Collides();
+		this.Triggers();
 	}
 }

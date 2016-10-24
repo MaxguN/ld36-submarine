@@ -154,6 +154,14 @@ Animator.prototype.GetRectangle = function () {
 	}
 }
 
+Animator.prototype.MoveTo = function (x, y) {
+	this.x = x;
+	this.y = y;
+
+	this.currentAnimation.x = x;
+	this.currentAnimation.y = y;
+}
+
 Animator.prototype.Hide = function () {
 	if (this.isDisplayed) {
 		this.container.removeChild(this.currentAnimation);

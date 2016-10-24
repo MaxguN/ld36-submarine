@@ -16,5 +16,6 @@ var Tags = {
 	Ennemy : 'ennemy',
 	EnnemyBullet : 'ennemy bullet',
 	Seamark : 'seamark',
-	SightArea : 'sight area'
+	SightArea : 'sight area',
+	Radar : 'radar'
 }

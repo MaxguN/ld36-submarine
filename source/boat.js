@@ -199,6 +199,22 @@ Boat.prototype.Collides = function (delta, length) {
 	return delta;
 }
 
+Boat.prototype.Ping = function (shape) {
+	function intersectCircles(circle1, circle2) {
+		return Math.sqrt(Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2)) < circle1.radius + circle2.radius;
+	}
+
+	var distance = Math.sqrt(Math.pow(shape.x - this.colliderShape.x, 2) + Math.pow(shape.y - this.colliderShape.y, 2)) / shape.radius
+
+	if (intersectCircles(shape, this.colliderShape) && ((this.target && !this.target.speed) || !this.target) &&  Math.random() < 0.75 + (1 - distance) / 4) {
+		this.target = {
+			x : shape.x,
+			y : shape.y
+		};
+		this.cooldown = 10;
+	}
+}
+
 Boat.prototype.Shoot = function (length) {
 	if (this.timerShoot <= 0) {
 		var x = this.target.x - this.x;

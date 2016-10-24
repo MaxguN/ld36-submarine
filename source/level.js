@@ -434,8 +434,18 @@ Level.prototype.Collides = function(shape) {
 	}
 };
 
+Level.prototype.PingBoats = function (shape) {
+	this.objects[Tags.Ennemy].forEach(function (boat) {
+		boat.Ping(shape);
+	}, this);
+}
+
 Level.prototype.AddObject = function (object) {
 	this.objects[object.colliderTag].push(object);
+
+	if (object.triggerTag && object.triggerTag !== object.colliderTag) {
+		this.objects[object.triggerTag].push(object);
+	}
 }
 
 Level.prototype.RemoveObject = function (object) {
@@ -445,6 +455,23 @@ Level.prototype.RemoveObject = function (object) {
 			break;
 		}
 	}
+
+	if (object.triggerTag && object.triggerTag !== object.colliderTag) {
+		for (var i = 0; i < this.objects[object.triggerTag].length; i += 1) {
+			if (this.objects[object.triggerTag][i] === object) {
+				this.objects[object.triggerTag].splice(i, 1);
+				break;
+			}
+		}
+	}
+}
+
+Level.prototype.GetObjects = function (tag) {
+	if (!this.objects[tag]) {
+		return [];
+	}
+
+	return this.objects[tag];
 }
 
 Level.prototype.GetColliders = function (whitelist) {

@@ -1,6 +1,7 @@
 function Submarine(x, y, level) {
 	Animator.call(this, x + 16, y + 16, level.map);
 	Collider.call(this, Tags.Player, [Tags.Seamark], new PIXI.Circle(x, y, 16));
+	Trigger.call(this, Tags.Radar, [], new PIXI.Circle(x, y, 0));
 
 	var self = this;
 
@@ -17,12 +18,24 @@ function Submarine(x, y, level) {
 	this.surfacing = false;
 	this.exploding = false;
 
-	this.energyCapacity = 60;
-	this.airCapacity = 5;
+	this.energyCapacity = 40;
+	this.airCapacity = 20;
+	this.radarCapacity = 100;
+	this.radarSpeed = 75;
+	this.radarFactor = 1;
 
 	this.lives = 3;
 	this.energy = this.energyCapacity;
 	this.air = this.airCapacity;
+	this.radar = 0;
+	this.radarFill = this.radarSpeed * this.radarFactor;
+
+	this.pingSpeed = 1024;
+	this.pingArea = new PIXI.Graphics();
+	this.pingAreaSize = 0;
+	this.pingAreaTimer = 0;
+	this.pingTriggerTimer = 0;
+	this.pingStrength = 0;
 
 	this.dialogs = [];
 
@@ -185,6 +198,67 @@ Submarine.prototype.Interact = function () {
 	}
 }
 
+Submarine.prototype.Radar = function (length, ping) {
+	if (ping) {
+		this.Ping(length); 
+
+		if (this.radar === 0) {
+			return;
+		}
+		
+		this.level.interface.ResetRadar();
+		this.radar = 0;
+	} else {
+		this.radar += length * this.radarFill;
+
+		if (this.radar >= this.radarCapacity) {
+			this.radar = this.radarCapacity;
+			this.radarFill = -this.radarSpeed;
+		} else if (this.radar <= 0) {
+			this.radar = 0;
+			this.radarFill = this.radarSpeed * this.radarFactor;
+			this.level.interface.ResetRadar();
+		}
+	}
+}
+
+Submarine.prototype.Ping = function (length) {
+	if (this.radar) {
+		this.pingStrength = this.radar;
+		this.pingAreaSize = this.level.window.w / 2 + 6 * this.pingStrength;
+		this.container.addChild(this.pingArea);
+	}
+
+	if (this.pingAreaSize) {
+		this.pingAreaTimer += length * this.pingSpeed;
+
+		if (this.pingAreaTimer < this.pingAreaSize) {
+			this.pingArea.clear();
+			this.pingArea.lineStyle(2, 0x333333, 1);
+			this.pingArea.drawCircle(this.x, this.y, this.pingAreaTimer);
+		} else {
+			this.container.removeChild(this.pingArea);
+
+			this.level.PingBoats(new PIXI.Circle(this.x, this.y, this.pingAreaSize * 0.75));
+
+			this.triggerShape.radius = this.pingAreaSize;
+			this.pingTriggerTimer = 4;
+
+			this.pingAreaTimer = 0;
+			this.pingAreaSize = 0;
+		}
+	}
+
+	if (this.pingTriggerTimer) {
+		this.pingTriggerTimer -= length;
+
+		if (this.pingTriggerTimer <= 0) {
+			this.pingTriggerTimer = 0;
+			this.triggerShape.radius = 0;
+		}
+	}
+}
+
 Submarine.prototype.Inventory = function () {
 	if (this.inventory.IsOpened()) {
 		this.inventory.Hide();
@@ -316,12 +390,21 @@ Submarine.prototype.Tick = function (length) {
 			this.currentAnimation.position.y = this.y;
 			this.colliderShape.x = this.x;
 			this.colliderShape.y = this.y;
+			this.triggerShape.x = this.x;
+			this.triggerShape.y = this.y;
 
 			this.level.UpdateCamera(new PIXI.Point(this.x, this.y));
 
 			if (keydown[keys.space]) {
 				this.Interact();
 				keydown[keys.space] = false;
+				return;
+			}
+
+			if (keydown[keys.r]) {
+				this.Radar(length);
+			} else {
+				this.Radar(length, true);
 			}
 
 			if (keydown[keys.i]) {
