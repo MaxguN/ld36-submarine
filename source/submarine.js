@@ -1,5 +1,5 @@
 function Submarine(x, y, level) {
-	Animator.call(this, x + 16, y + 16, level.map);
+	Animator.call(this, x + 16, y + 16, level.dynamic);
 	Collider.call(this, Tags.Player, [Tags.Seamark], new PIXI.Circle(x, y, 16));
 	Trigger.call(this, Tags.Radar, [], new PIXI.Circle(x, y, 0));
 
@@ -8,7 +8,7 @@ function Submarine(x, y, level) {
 	this.locked = false;
 
 	this.rotation = 0;
-	this.speed = 256; // pixels/second
+	this.speed = 128; // pixels/second
 	this.speed_surface = this.speed * 0.75; // pixels/second
 	this.speed_underwater = this.speed * 1.25; // pixels/second
 	this.currentSpeed = this.speed_surface;
@@ -33,7 +33,9 @@ function Submarine(x, y, level) {
 	this.pingSpeed = 1024;
 	this.pingArea = new PIXI.Graphics();
 	this.pingAreaSize = 0;
+	this.pingAreaMax = 1000; // add half window size, radius (in 800 width --> 2400 diameter)
 	this.pingAreaTimer = 0;
+	this.pingBoatFactor = 0.75;
 	this.pingTriggerTimer = 0;
 	this.pingStrength = 0;
 
@@ -225,7 +227,7 @@ Submarine.prototype.Radar = function (length, ping) {
 Submarine.prototype.Ping = function (length) {
 	if (this.radar) {
 		this.pingStrength = this.radar;
-		this.pingAreaSize = this.level.window.w / 2 + 6 * this.pingStrength;
+		this.pingAreaSize = this.level.window.w / 2 + this.pingAreaMax * this.pingStrength / this.radarCapacity;
 		this.container.addChild(this.pingArea);
 	}
 
@@ -239,7 +241,7 @@ Submarine.prototype.Ping = function (length) {
 		} else {
 			this.container.removeChild(this.pingArea);
 
-			this.level.PingBoats(new PIXI.Circle(this.x, this.y, this.pingAreaSize * 0.75));
+			this.level.PingBoats(new PIXI.Circle(this.x, this.y, this.pingAreaSize * this.pingBoatFactor));
 
 			this.triggerShape.radius = this.pingAreaSize;
 			this.pingTriggerTimer = 4;

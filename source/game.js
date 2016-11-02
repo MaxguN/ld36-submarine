@@ -15,6 +15,17 @@ function tick(length) {
     currentScene.Tick(length);
 }
 
+function preload(level) {
+	load.json('levels/' + level + '.json', function (data) {
+		data.tilesets.forEach(function (tileset, index) {
+			var texture = new Image();
+			texture.src = tileset.image;
+		});
+	});
+}
+
+preload('level1');
+
 ticker.add(tick)
 
 currentScene.on('ready', function () {

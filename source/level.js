@@ -59,15 +59,16 @@ function Level(name, renderer) {
 
 	this.renderer = renderer;
 	this.container = new PIXI.Container();
+	this.game = new PIXI.Container();
 	this.map = new PIXI.Container();
+	this.dynamic = new PIXI.Container();
 	this.gui = new PIXI.Container();
+
+	this.mapSprite = null;
 
 	this.gui.position = new PIXI.Point(0,0);
 	this.gui.width = this.renderer.width;
 	this.gui.height = this.renderer.height;
-
-	this.container.addChild(this.map);
-	this.container.addChild(this.gui);
 
 	load.json('levels/' + name + '.json', function (data) {self.Init(data);});
 }
@@ -216,6 +217,11 @@ Level.prototype.Init = function(level) {
 		}
 	}, this);
 
+	this.colliders.top.push(new PIXI.Rectangle(-this.tile.width, this.map.height, this.map.width + this.tile.width * 2, this.tile.height));
+	this.colliders.left.push(new PIXI.Rectangle(this.map.width, 0, this.tile.width, this.map.height));
+	this.colliders.right.push(new PIXI.Rectangle(-this.tile.width, 0, this.tile.width, this.map.height));
+	this.colliders.bottom.push(new PIXI.Rectangle(-this.tile.width, -this.tile.height, this.map.width + this.tile.width * 2, this.tile.height));
+
 	for (var i = 0; i < this.riddles; i += 1) {
 		var location;
 		do {
@@ -233,6 +239,16 @@ Level.prototype.Init = function(level) {
 	while (this.next.ready.length > 0) {
 		(this.next.ready.shift())();
 	}
+
+	var mapRenderTexture = PIXI.RenderTexture.create(this.map.width, this.map.height);
+	this.renderer.render(this.map, mapRenderTexture);
+	this.mapSprite = new PIXI.Sprite(mapRenderTexture);
+
+	// this.game.addChild(this.map);
+	this.game.addChild(this.mapSprite);
+	this.game.addChild(this.dynamic);
+	this.container.addChild(this.game);
+	this.container.addChild(this.gui);
 
 	this.interface = new GUI(this);
 
@@ -299,20 +315,20 @@ Level.prototype.RespawnSeamark = function (seamark) {
 }
 
 Level.prototype.CenterCamera = function (point) {
-	this.map.x = -Math.min(Math.max(0, point.x - this.renderer.width / 2), this.map.width - this.renderer.width);
-	this.map.y = -Math.min(Math.max(0, point.y - this.renderer.height / 2), this.map.height - this.renderer.height);
+	this.game.x = -Math.min(Math.max(0, point.x - this.renderer.width / 2), this.mapSprite.width - this.renderer.width);
+	this.game.y = -Math.min(Math.max(0, point.y - this.renderer.height / 2), this.mapSprite.height - this.renderer.height);
 }
 
 Level.prototype.UpdateCamera = function(point) {
 	var space = 0;
 
-	if (-this.map.x > point.x + space - this.renderer.width / 2) { // left border
-		this.map.x = Math.round(-Math.min(Math.max(0, point.x + space - this.renderer.width / 2), this.map.width - this.renderer.width));
-	} else if (-this.map.x < point.x - space - this.renderer.width / 2) { // right border
-		this.map.x = Math.round(-Math.min(Math.max(0, point.x - space - this.renderer.width / 2), this.map.width - this.renderer.width));
+	if (-this.game.x > point.x + space - this.renderer.width / 2) { // left border
+		this.game.x = Math.round(-Math.min(Math.max(0, point.x + space - this.renderer.width / 2), this.mapSprite.width - this.renderer.width));
+	} else if (-this.game.x < point.x - space - this.renderer.width / 2) { // right border
+		this.game.x = Math.round(-Math.min(Math.max(0, point.x - space - this.renderer.width / 2), this.mapSprite.width - this.renderer.width));
 	}
  	
-	this.map.y = Math.round(-Math.min(Math.max(0, point.y - this.renderer.height / 2), this.map.height - this.renderer.height));
+	this.game.y = Math.round(-Math.min(Math.max(0, point.y - this.renderer.height / 2), this.mapSprite.height - this.renderer.height));
 };
 
 Level.prototype.SetInteractable = function (object) {

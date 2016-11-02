@@ -1,5 +1,5 @@
 function SeaMark(x, y, level, number, location) {
-	Animator.call(this, x + 16, y + 16, level.map);
+	Animator.call(this, x + 16, y + 16, level.dynamic);
 	Collider.call(this, Tags.Seamark, [Tags.Player], new PIXI.Circle(x, y, 64));
 	Trigger.call(this, Tags.Seamark, [Tags.Radar], new PIXI.Circle(x, y, 16));
 
@@ -11,7 +11,7 @@ function SeaMark(x, y, level, number, location) {
 	this.locked = false;
 	this.notify = false;
 	this.level = level;
-	this.notification = new Animator(x + 16, y + 16 - level.tile.height / 2, level.map);
+	this.notification = new Animator(x + 16, y + 16 - level.tile.height / 2, level.dynamic);
 	this.dialog = new Dialog(level, this.file);
 
 	load.json('animations/seamark.json', function (data) {self.Init(data);});

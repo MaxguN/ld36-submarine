@@ -1,15 +1,17 @@
-	- post-mortem
-
 	- fix collisions
+	- fix pathfinding (stuck)
 	- fix item grab inventory
+	- preloader for resources (loading screen ?)
 
-	- trees
+	- post-mortem
 
 	- sfx
 	- music
 
+
+
+
+
 O - hints
-
 O - cooldown dive (30s or energy @ 50% min)
-
 O - fog of war

@@ -135,8 +135,8 @@ GUI.prototype.Tick = function (length) {
 		if (seamark.notify) {
 			var width = this.level.window.w;
 			var height = this.level.window.h;
-			var x = this.level.submarine.x + this.level.map.x;
-			var y = this.level.submarine.y + this.level.map.y;
+			var x = this.level.submarine.x + this.level.game.x;
+			var y = this.level.submarine.y + this.level.game.y;
 			var dx = seamark.x - this.level.submarine.x;
 			var dy = seamark.y - this.level.submarine.y;
 			var diffx = 0;

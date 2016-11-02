@@ -1,5 +1,5 @@
 function Boat(x, y, level, rotation) {
-	Animator.call(this, x + 16, y + 16, level.map);
+	Animator.call(this, x + 16, y + 16, level.dynamic);
 	Collider.call(this, Tags.Ennemy, [], new PIXI.Circle(x, y, 16));
 	Trigger.call(this, Tags.SightArea, [Tags.Player], new PIXI.Circle(x, y, 200));
 

@@ -1,5 +1,5 @@
 function Torpedo(x, y, level, rotation, parent) {
-	Animator.call(this, x + 16, y + 16, level.map);
+	Animator.call(this, x + 16, y + 16, level.dynamic);
 	Collider.call(this, Tags.EnnemyBullet, [], new PIXI.Circle(x, y - 8, 8));
 	Trigger.call(this, Tags.EnnemyBullet, [Tags.Player, Tags.Seamark, Tags.Ennemy], new PIXI.Circle(x, y - 8, 8));
 
