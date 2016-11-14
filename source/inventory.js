@@ -1,6 +1,7 @@
 function Inventory(item, level) {
 	var self = this;
 
+	// this.extract = new PIXI.WebGLExtract(renderer);
 	this.level = level;
 
 	this.isDisplayed = false;
@@ -38,13 +39,26 @@ Inventory.prototype.Init = function (item) {
 		this.parts[index].attach = part.attach;
 		this.parts[index].attached = [];
 
-		// this.ItemUnlock(index);
+		this.ItemUnlock(index);
 	}, this);
 
 	this.listeners.grab = function (event) {
 		if (event.button === 0) {
 			self.parts.some(function (part) {
 				if (!part.locked && part.containsPoint(mouse)) {
+					// ToDo check pixel value for alpha
+					var pixels = renderer.extract.pixels();
+					var x = mouse.x * 2 - Math.floor(part.x) * 2;
+					var y = mouse.y * 2 - Math.floor(part.y) * 2;
+					var index = (y * part.width * 2 + x) * 4 - 2;
+
+					console.log(mouse.x, mouse.y, Math.floor(part.x), Math.floor(part.y), part.width, part.height);
+					console.log(index, pixels[index], pixels);
+
+					if (pixels[index]) {
+
+					}
+
 					self.grabbed = part;
 					self.attached.push(part);
 

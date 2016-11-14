@@ -2,59 +2,59 @@
 	"name" : "Sextant",
 	"parts" : [
 		{
-			"name" : "Frame",
-			"image" : "frame.png",
-			"attach" : [
-				{"x" : 399, "y" : 80, "r" : 20, "part" : 1},
-				{"x" : 54, "y" : 353, "r" : 20, "part" : 2},
-				{"x" : 665, "y" : 160, "r" : 20, "part" : 3},
-				{"x" : 425, "y" : 192, "r" : 20, "part" : 4},
-				{"x" : 65, "y" : 440, "r" : 20, "part" : 5},
-				{"x" : 399, "y" : 80, "r" : 20, "part" : 6}
-			]
-		},
-		{
 			"name" : "Big Mirror",
 			"image" : "bigmirror.png",
 			"attach" : [
-				{"x" : 48, "y" : 208, "r" : 20, "part" : 0},
-				{"x" : 48, "y" : 208, "r" : 20, "part" : 6}
-			]
-		},
-		{
-			"name" : "Small Mirror",
-			"image" : "smallmirror.png",
-			"attach" : [
-				{"x" : 43, "y" : 148, "r" : 20, "part" : 0}
-			]
-		},
-		{
-			"name" : "Scope",
-			"image" : "scope.png",
-			"attach" : [
-				{"x" : 95 , "y" : 247, "r" : 20, "part" : 0}
-			]
-		},
-		{
-			"name" : "Handle",
-			"image" : "handle.png",
-			"attach" : [
-				{"x" : 69, "y" : 22, "r" : 20, "part" : 0}
+				{"x" : 48, "y" : 208, "r" : 20, "part" : 5},
+				{"x" : 48, "y" : 208, "r" : 20, "part" : 2}
 			]
 		},
 		{
 			"name" : "Limb",
 			"image" : "limb.png",
 			"attach" : [
-				{"x" : 64, "y" : 182, "r" : 20, "part" : 0}
+				{"x" : 64, "y" : 182, "r" : 20, "part" : 5}
 			]
 		},
 		{
 			"name" : "Lever",
 			"image" : "lever.png",
 			"attach" : [
-				{"x" : 100, "y" : 91, "r" : 20, "part" : 0},
-				{"x" : 100, "y" : 91, "r" : 20, "part" : 1}
+				{"x" : 100, "y" : 91, "r" : 20, "part" : 5},
+				{"x" : 100, "y" : 91, "r" : 20, "part" : 0}
+			]
+		},
+		{
+			"name" : "Small Mirror",
+			"image" : "smallmirror.png",
+			"attach" : [
+				{"x" : 43, "y" : 148, "r" : 20, "part" : 5}
+			]
+		},
+		{
+			"name" : "Scope",
+			"image" : "scope.png",
+			"attach" : [
+				{"x" : 95 , "y" : 247, "r" : 20, "part" : 5}
+			]
+		},
+		{
+			"name" : "Frame",
+			"image" : "frame.png",
+			"attach" : [
+				{"x" : 399, "y" : 80, "r" : 20, "part" : 0},
+				{"x" : 54, "y" : 353, "r" : 20, "part" : 3},
+				{"x" : 665, "y" : 160, "r" : 20, "part" : 4},
+				{"x" : 425, "y" : 192, "r" : 20, "part" : 6},
+				{"x" : 65, "y" : 440, "r" : 20, "part" : 1},
+				{"x" : 399, "y" : 80, "r" : 20, "part" : 2}
+			]
+		},
+		{
+			"name" : "Handle",
+			"image" : "handle.png",
+			"attach" : [
+				{"x" : 69, "y" : 22, "r" : 20, "part" : 5}
 			]
 		}
 	]

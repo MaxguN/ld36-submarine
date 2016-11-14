@@ -96,7 +96,7 @@ Submarine.prototype.Collides = function (delta, length) {
 	var width = rectangle.width;
 	var height = rectangle.height;
 
-	collisions = this.level.Collides(rectangle);
+	collisions = this.level.Collides(new PIXI.Rectangle(x, y, width, height));
 
 	if (collisions.collides) {
 		for (var way in collisions.colliders) {
@@ -107,7 +107,7 @@ Submarine.prototype.Collides = function (delta, length) {
 				var insideRight = collider.x + collider.width - x > 0;
 
 				if (way === 'right') {
-					if (delta.x < 0) { // left
+					if (delta.x < 0 && rectangle.x >= collider.x + collider.width) { // left
 						var dx = collider.x + collider.width - rectangle.x
 
 						if (dx > delta.x) {
@@ -117,7 +117,7 @@ Submarine.prototype.Collides = function (delta, length) {
 				}
 
 				if (way === 'left') {
-					if (delta.x > 0) { // right
+					if (delta.x > 0 && rectangle.x + rectangle.width <= collider.x) { // right
 						var dx = collider.x - (rectangle.x + rectangle.width);
 
 						if (dx < delta.x) {
@@ -127,7 +127,7 @@ Submarine.prototype.Collides = function (delta, length) {
 				}
 
 				if (way === 'top') {
-					if (delta.y > 0) {
+					if (delta.y > 0 && rectangle.y + rectangle.height <= collider.y) {
 						var dy = collider.y - (rectangle.y + rectangle.height);
 
 						if (dy < delta.y) {
@@ -137,7 +137,7 @@ Submarine.prototype.Collides = function (delta, length) {
 				}
 
 				if (way === 'bottom') {
-					if (delta.y < 0) {
+					if (delta.y < 0 && rectangle.y >= collider.y + collider.height) {
 						var dy = collider.y + collider.height - rectangle.y;
 
 						if (dy > delta.y) {

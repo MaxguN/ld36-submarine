@@ -4,32 +4,23 @@ ticker.stop();
 
 var renderer = new PIXI.autoDetectRenderer(800, 480);
 renderer.backgroundColor = 0x333333;
+renderer.roundPixels = true;
 document.body.appendChild(renderer.view);
 
+var preloader = new Preloader(renderer);
 var level = null;//new Level('level0', renderer);
 var menu = new Menu(renderer);
-
-var currentScene = menu;
+var currentScene = preloader;
 
 function tick(length) {
     currentScene.Tick(length);
 }
 
-function preload(level) {
-	load.json('levels/' + level + '.json', function (data) {
-		data.tilesets.forEach(function (tileset, index) {
-			var texture = new Image();
-			texture.src = tileset.image;
-		});
-	});
-}
-
-preload('level1');
-
 ticker.add(tick)
+ticker.start();
 
-currentScene.on('ready', function () {
-    ticker.start();
+preloader.on('ready', function () {
+	currentScene = menu;
 });
 
 document.addEventListener('keydown', onkeydown);

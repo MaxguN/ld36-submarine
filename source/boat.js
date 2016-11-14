@@ -18,6 +18,9 @@ function Boat(x, y, level, rotation) {
 	this.lives = 1;
 	this.exploding = false;
 
+	this.path = null;
+
+	this.lastPosition = new PIXI.Point(this.x, this.y);
 	this.target = null;
 	this.tailing = 0;
 	this.pursuit = false;
@@ -274,21 +277,33 @@ Boat.prototype.Tick = function (length) {
 			}
 
 			if (Math.sqrt(Math.pow(this.x - this.target.x, 2) + Math.pow(this.y - this.target.y, 2)) > this.tailing) {
-				var path = this.FindPath(this.target, 1);
-				
-				if (!path || !path[1]) {
-					path = this.FindPath(this.target);
-
-					if (path.length < 2) {
-						this.target = null;
-					}
+				if (Math.sqrt(Math.pow(this.lastPosition.x - this.target.x, 2) + Math.pow(this.lastPosition.y - this.target.y, 2)) > this.level.tile.width * 1.5) {
+					this.lastPosition = new PIXI.Point(this.target.x, this.target.y);
+					this.path = this.FindPath(this.target);
 				}
-				
-				if (path && path[1]) {
-					target = path[1];
+
+				if (this.path && this.path.length) {
+					var targetRectangle = new PIXI.Rectangle(this.path[0].x * this.level.tile.width, this.path[0].y * this.level.tile.height, this.level.tile.width, this.level.tile.height);
+					
+					if (targetRectangle.contains(this.x, this.y)) {
+						this.path.shift();
+
+						if (!this.path.length) {
+							this.path = null;
+							this.target = null;
+							this.lastPosition = new PIXI.Point(this.x, this.y);
+						} else {
+							target = this.path[0];
+						}
+					} else {
+						target = this.path[0];
+					}
+
 				}
 			} else if (!this.target.speed) {
+				this.path = null;
 				this.target = null;
+				this.lastPosition = new PIXI.Point(this.x, this.y);
 			} else {
 				delta.x = this.target.x - this.x;
 				delta.y = this.target.y - this.y;

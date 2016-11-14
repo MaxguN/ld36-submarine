@@ -1,7 +1,4 @@
-	- fix collisions
-	- fix pathfinding (stuck)
 	- fix item grab inventory
-	- preloader for resources (loading screen ?)
 
 	- post-mortem
 
