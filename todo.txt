@@ -1,5 +1,3 @@
-	- fix item grab inventory
-
 	- post-mortem
 
 	- sfx

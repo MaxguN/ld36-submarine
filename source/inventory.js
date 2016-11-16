@@ -39,24 +39,27 @@ Inventory.prototype.Init = function (item) {
 		this.parts[index].attach = part.attach;
 		this.parts[index].attached = [];
 
-		this.ItemUnlock(index);
+		// this.ItemUnlock(index);
 	}, this);
 
 	this.listeners.grab = function (event) {
 		if (event.button === 0) {
 			self.parts.some(function (part) {
 				if (!part.locked && part.containsPoint(mouse)) {
-					// ToDo check pixel value for alpha
-					var pixels = renderer.extract.pixels();
+					var sourceImage = part.texture.baseTexture.source;
+					var canvas = document.createElement('canvas');
+					canvas.width = sourceImage.width;
+					canvas.height = sourceImage.height;
+					var context = canvas.getContext('2d');
+					context.drawImage(sourceImage, 0, 0);
+
+					var pixels = context.getImageData(0, 0, sourceImage.width, sourceImage.height).data;
 					var x = mouse.x * 2 - Math.floor(part.x) * 2;
 					var y = mouse.y * 2 - Math.floor(part.y) * 2;
-					var index = (y * part.width * 2 + x) * 4 - 2;
+					var index = (y * part.width * 2 + x) * 4 - 1;
 
-					console.log(mouse.x, mouse.y, Math.floor(part.x), Math.floor(part.y), part.width, part.height);
-					console.log(index, pixels[index], pixels);
-
-					if (pixels[index]) {
-
+					if (!pixels[index]) {
+						return false;
 					}
 
 					self.grabbed = part;
@@ -101,7 +104,7 @@ Inventory.prototype.Init = function (item) {
 		}
 	};
 	this.listeners.release = function (event) {
-		if (event.button === 0) {
+		if (event.button === 0 && self.grabbed) {
 			self.grabbed.attach.forEach(function (attach) {
 				if (!self.parts[attach.part].locked && self.grabbed.attached.indexOf(self.parts[attach.part]) === -1) {
 					self.parts[attach.part].attach.some(function (otherAttach) {
@@ -172,11 +175,22 @@ Inventory.prototype.ItemUnlock = function (index) {
 	if (this.parts[index] && this.parts[index].locked) {
 		var x = 10 + Math.random() * (780 - this.parts[index].width);
 		var y = 10 + Math.random() * (460 - this.parts[index].height);
+		var displayOrder = [];
 
 		this.parts[index].position = new PIXI.Point(x, y);
-		this.container.addChild(this.parts[index]);
 		this.parts[index].locked = false;
 		this.unlocked += 1;
+
+		this.parts.forEach(function (part) {
+			if (!part.locked) {
+				this.container.removeChild(part);
+				displayOrder.unshift(part);			
+			}
+		}, this);
+
+		displayOrder.forEach(function (part) {
+			this.container.addChild(part);
+		}, this)
 	}
 }
 
