@@ -7,32 +7,34 @@ function Preloader(renderer) {
 		ready : []
 	};
 
+	this.loader = PIXI.loader;
 	this.assets = [
-		'attention.png',
-		'background.png',
-		'boat.png',
-		'ground_terrain.png',
-		'island_terrain.png',
-		'notify.png',
-		'sea.png',
-		'seamark.png',
-		'submarine.png',
-		'torpedo.png',
-		'tutorial.png',
-		'Characters/admiral.png',
-		'Characters/captain.png',
-		'Characters/commander.png',
-		'Characters/communication_officer.png',
-		'Characters/thule.png',
-		'icons/air.png',
-		'icons/energy.png',
-		'Sextant/bigmirror.png',
-		'Sextant/frame.png',
-		'Sextant/handle.png',
-		'Sextant/lever.png',
-		'Sextant/limb.png',
-		'Sextant/scope.png',
-		'Sextant/smallmirror.png'
+		['attention', 'attention.png'],
+		['background', 'background.png'],
+		['boat', 'boat.png'],
+		['ground_terrain', 'ground_terrain.png'],
+		['island_terrain', 'island_terrain.png'],
+		['notify', 'notify.png'],
+		['sea', 'sea.png'],
+		['seamark', 'seamark.png'],
+		['submarine', 'submarine.png'],
+		['title', 'title.png'],
+		['torpedo', 'torpedo.png'],
+		['tutorial', 'tutorial.png'],
+		['admiral', 'Characters/admiral.png'],
+		['captain', 'Characters/captain.png'],
+		['commander', 'Characters/commander.png'],
+		['communication_officer', 'Characters/communication_officer.png'],
+		['thule', 'Characters/thule.png'],
+		['air', 'icons/air.png'],
+		['energy', 'icons/energy.png'],
+		['bigmirror', 'Sextant/bigmirror.png'],
+		['frame', 'Sextant/frame.png'],
+		['handle', 'Sextant/handle.png'],
+		['lever', 'Sextant/lever.png'],
+		['limb', 'Sextant/limb.png'],
+		['scope', 'Sextant/scope.png'],
+		['smallmirror', 'Sextant/smallmirror.png']
 	];
 
 	this.renderer = renderer;
@@ -49,23 +51,20 @@ function Preloader(renderer) {
 Preloader.prototype.Init = function (data) {
 	var self = this;
 
-	var assetCount = this.assets.length;
-
 	this.assets.forEach(function (asset) {
-		load.image('textures/' + asset, function () {
-			assetCount -= 1
-
-			if (assetCount === 0) {
-				self.loaded = true;
-				self.listeners.ready.forEach(function (listener) {
-					listener();
-				});
-				while (self.next.ready.length > 0) {
-					(self.next.ready.shift())();
-				}
-			}
-		});
+		this.loader.add(asset[0], 'textures/' + asset[1]);
 	}, this);
+
+	this.loader.load();
+	this.loader.once('complete', function () {
+		self.loaded = true;
+		self.listeners.ready.forEach(function (listener) {
+			listener();
+		});
+		while (self.next.ready.length > 0) {
+			(self.next.ready.shift())();
+		}
+	});
 }
 
 Preloader.prototype.on = function(event, callback) {

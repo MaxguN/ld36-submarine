@@ -21,8 +21,9 @@ Menu.prototype.Init = function (data) {
 	//main
 	var main = {};
 	main.screen = new PIXI.Container();
-	var title = new PIXI.Text('Adventure aboard the Narwhal', {fontFamily : 'Arial', fontSize: 32, fill : 0xEEEEEE});
-	title.position = new PIXI.Point((800 - title.width) / 2, 50);
+	// var title = new PIXI.Text('Adventure aboard the Narwhal', {fontFamily : 'Arial', fontSize: 32, fill : 0xEEEEEE});
+	var title = PIXI.Sprite.fromImage('textures/title.png');
+	title.position = new PIXI.Point((800 - 312) / 2, 50);
 	var button_play = new Button(new PIXI.Text('PLAY', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 300, 196, 200, 36);
 	var button_controls = new Button(new PIXI.Text('CONTROLS', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 300, 242, 200, 36);
 	var button_credits = new Button(new PIXI.Text('CREDITS', {fontFamily : 'Arial', fontSize: 22, fill : 0xEEEEEE}), 300, 288, 200, 36);

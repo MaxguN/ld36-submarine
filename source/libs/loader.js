@@ -1,6 +1,7 @@
 var load = (function() {
 	var loading = [];
 	var loaded = {};
+	var callbacks = {};
 	var listeners = {
 		error : [],
 		ready : []
@@ -41,11 +42,18 @@ var load = (function() {
 
 	function loadjson(uri, callback) {
 		if (loaded[uri] === undefined) {
-			loading.push(uri);
-			ajax.getJSON(uri, function (data) {
-				setloaded(uri, data);
-				call(callback, data);
-			});
+			if (loading.indexOf(uri) === -1) {
+				loading.push(uri);
+				callbacks[uri] = [callback];
+				ajax.getJSON(uri, function (data) {
+					setloaded(uri, data);
+					callbacks[uri].forEach(function (cb) {
+						call(cb, data);
+					})
+				});
+			} else {
+				callbacks[uri].push(callback);
+			}
 		} else {
 			call(callback, loaded[uri]);
 		}
